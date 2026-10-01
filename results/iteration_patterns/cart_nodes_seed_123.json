@@ -1,0 +1,219 @@
+[
+  {
+    "node": 0,
+    "feature": "crp",
+    "threshold": 0.5850000083446503,
+    "n": 223,
+    "present_fraction": 0.5067264573991032
+  },
+  {
+    "node": 1,
+    "feature": "bm",
+    "threshold": 2.350000023841858,
+    "n": 133,
+    "present_fraction": 0.7218045112781954
+  },
+  {
+    "node": 2,
+    "feature": "alp",
+    "threshold": 90.5,
+    "n": 26,
+    "present_fraction": 0.34615384615384615
+  },
+  {
+    "node": 3,
+    "feature": "ast",
+    "threshold": 25.5,
+    "n": 22,
+    "present_fraction": 0.22727272727272727
+  },
+  {
+    "node": 4,
+    "feature": "bm",
+    "threshold": 2.25,
+    "n": 18,
+    "present_fraction": 0.1111111111111111
+  },
+  {
+    "node": 5,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 14,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 6,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.5
+  },
+  {
+    "node": 7,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.75
+  },
+  {
+    "node": 8,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 1.0
+  },
+  {
+    "node": 9,
+    "feature": "ecf_tbw",
+    "threshold": 34.954999923706055,
+    "n": 107,
+    "present_fraction": 0.8130841121495327
+  },
+  {
+    "node": 10,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 5,
+    "present_fraction": 0.2
+  },
+  {
+    "node": 11,
+    "feature": "protein_pct",
+    "threshold": 14.934999942779541,
+    "n": 102,
+    "present_fraction": 0.8431372549019608
+  },
+  {
+    "node": 12,
+    "feature": "gfr",
+    "threshold": 108.90499877929688,
+    "n": 26,
+    "present_fraction": 0.6923076923076923
+  },
+  {
+    "node": 13,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 20,
+    "present_fraction": 0.85
+  },
+  {
+    "node": 14,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 6,
+    "present_fraction": 0.16666666666666666
+  },
+  {
+    "node": 15,
+    "feature": "creatinine",
+    "threshold": 1.1899999976158142,
+    "n": 76,
+    "present_fraction": 0.8947368421052632
+  },
+  {
+    "node": 16,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 72,
+    "present_fraction": 0.9166666666666666
+  },
+  {
+    "node": 17,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.5
+  },
+  {
+    "node": 18,
+    "feature": "vitamin_d",
+    "threshold": 19.380000114440918,
+    "n": 90,
+    "present_fraction": 0.18888888888888888
+  },
+  {
+    "node": 19,
+    "feature": "bmi",
+    "threshold": 37.10000038146973,
+    "n": 44,
+    "present_fraction": 0.022727272727272728
+  },
+  {
+    "node": 20,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 40,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 21,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.25
+  },
+  {
+    "node": 22,
+    "feature": "crp",
+    "threshold": 2.7050000429153442,
+    "n": 46,
+    "present_fraction": 0.34782608695652173
+  },
+  {
+    "node": 23,
+    "feature": "ecf_tbw",
+    "threshold": 44.5,
+    "n": 27,
+    "present_fraction": 0.5185185185185185
+  },
+  {
+    "node": 24,
+    "feature": "creatinine",
+    "threshold": 0.8149999976158142,
+    "n": 20,
+    "present_fraction": 0.35
+  },
+  {
+    "node": 25,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 12,
+    "present_fraction": 0.08333333333333333
+  },
+  {
+    "node": 26,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 8,
+    "present_fraction": 0.75
+  },
+  {
+    "node": 27,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 7,
+    "present_fraction": 1.0
+  },
+  {
+    "node": 28,
+    "feature": "hgb",
+    "threshold": 12.799999713897705,
+    "n": 19,
+    "present_fraction": 0.10526315789473684
+  },
+  {
+    "node": 29,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 5,
+    "present_fraction": 0.4
+  },
+  {
+    "node": 30,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 14,
+    "present_fraction": 0.0
+  }
+]

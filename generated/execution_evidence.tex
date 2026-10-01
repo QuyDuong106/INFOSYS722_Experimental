@@ -1,0 +1,15 @@
+\begin{table}[H]
+\centering\small
+\caption{Execution inventory counted from saved metrics and prediction files. Counts include the dummy where present and repeated evaluations of the same source records.}
+\begin{tabular}{llll}
+\toprule
+Workflow & Metric rows & Prediction rows & Model families \\
+\midrule
+Fixed holdout & 120 & 5,760 & 6 \\
+Tuned holdout & 25 & 1,200 & 4 \\
+Leave-one-out & 6 & 1,914 & 6 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Sources: \path{results/holdout/}, \path{results/tuning/} and \path{results/lopo/}, each containing \path{metrics.csv} and \path{predictions.csv}. Prediction rows are evaluation appearances, not unique patients. Saved fitted pipelines are in \path{models/holdout/}, \path{models/tuned/} and \path{models/lopo/}.

@@ -1,0 +1,233 @@
+[
+  {
+    "node": 0,
+    "feature": "crp",
+    "threshold": 0.5850000083446503,
+    "n": 223,
+    "present_fraction": 0.5067264573991032
+  },
+  {
+    "node": 1,
+    "feature": "bm",
+    "threshold": 2.350000023841858,
+    "n": 141,
+    "present_fraction": 0.7092198581560284
+  },
+  {
+    "node": 2,
+    "feature": "bmi",
+    "threshold": 24.649999618530273,
+    "n": 31,
+    "present_fraction": 0.3870967741935484
+  },
+  {
+    "node": 3,
+    "feature": "vitamin_d",
+    "threshold": 24.920000076293945,
+    "n": 16,
+    "present_fraction": 0.6875
+  },
+  {
+    "node": 4,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 7,
+    "present_fraction": 0.2857142857142857
+  },
+  {
+    "node": 5,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 9,
+    "present_fraction": 1.0
+  },
+  {
+    "node": 6,
+    "feature": "height",
+    "threshold": 153.5,
+    "n": 15,
+    "present_fraction": 0.06666666666666667
+  },
+  {
+    "node": 7,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.25
+  },
+  {
+    "node": 8,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 11,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 9,
+    "feature": "ecf_tbw",
+    "threshold": 35.114999771118164,
+    "n": 110,
+    "present_fraction": 0.8
+  },
+  {
+    "node": 10,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 6,
+    "present_fraction": 0.16666666666666666
+  },
+  {
+    "node": 11,
+    "feature": "protein_pct",
+    "threshold": 15.019999980926514,
+    "n": 104,
+    "present_fraction": 0.8365384615384616
+  },
+  {
+    "node": 12,
+    "feature": "obesity_pct",
+    "threshold": 33.33500099182129,
+    "n": 32,
+    "present_fraction": 0.65625
+  },
+  {
+    "node": 13,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 8,
+    "present_fraction": 0.125
+  },
+  {
+    "node": 14,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 24,
+    "present_fraction": 0.8333333333333334
+  },
+  {
+    "node": 15,
+    "feature": "alp",
+    "threshold": 91.5,
+    "n": 72,
+    "present_fraction": 0.9166666666666666
+  },
+  {
+    "node": 16,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 59,
+    "present_fraction": 0.9661016949152542
+  },
+  {
+    "node": 17,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 13,
+    "present_fraction": 0.6923076923076923
+  },
+  {
+    "node": 18,
+    "feature": "ecf_tbw",
+    "threshold": 45.864999771118164,
+    "n": 82,
+    "present_fraction": 0.15853658536585366
+  },
+  {
+    "node": 19,
+    "feature": "vitamin_d",
+    "threshold": 23.43333339691162,
+    "n": 71,
+    "present_fraction": 0.09859154929577464
+  },
+  {
+    "node": 20,
+    "feature": "creatinine",
+    "threshold": 0.9549999833106995,
+    "n": 56,
+    "present_fraction": 0.03571428571428571
+  },
+  {
+    "node": 21,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 46,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 22,
+    "feature": "vitamin_d",
+    "threshold": 11.549999713897705,
+    "n": 10,
+    "present_fraction": 0.2
+  },
+  {
+    "node": 23,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.5
+  },
+  {
+    "node": 24,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 6,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 25,
+    "feature": "comorbidity",
+    "threshold": 0.5,
+    "n": 15,
+    "present_fraction": 0.3333333333333333
+  },
+  {
+    "node": 26,
+    "feature": "crp",
+    "threshold": 1.9150000214576721,
+    "n": 11,
+    "present_fraction": 0.09090909090909091
+  },
+  {
+    "node": 27,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.25
+  },
+  {
+    "node": 28,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 7,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 29,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 1.0
+  },
+  {
+    "node": 30,
+    "feature": "vfr",
+    "threshold": 9.5,
+    "n": 11,
+    "present_fraction": 0.5454545454545454
+  },
+  {
+    "node": 31,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 32,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 7,
+    "present_fraction": 0.8571428571428571
+  }
+]

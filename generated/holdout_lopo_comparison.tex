@@ -1,0 +1,18 @@
+\begin{table}[H]
+\centering\small
+\caption{Holdout and LOPO comparison for fixed RFE--CART candidates at threshold 0.5. Holdout entries average five seeds; LOPO entries pool 319 held-out predictions from one complete run.}
+\label{tab:holdout-lopo-comparison}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+& \multicolumn{3}{c}{ROC--AUC} & \multicolumn{3}{c}{Sensitivity} \\
+\cmidrule(lr){2-4}\cmidrule(l){5-7}
+Model & Holdout val. & Holdout test & LOPO & Holdout val. & Holdout test & LOPO \\
+\midrule
+Logistic regression & 0.838 & 0.887 & 0.874 & 0.758 & 0.858 & 0.820 \\
+Random forest & 0.776 & 0.850 & 0.857 & 0.717 & 0.850 & 0.839 \\
+XGBoost & 0.777 & 0.844 & 0.835 & 0.708 & 0.858 & 0.807 \\
+LightGBM & 0.772 & 0.841 & 0.851 & 0.717 & 0.850 & 0.832 \\
+Stacking & 0.812 & 0.881 & 0.865 & 0.733 & 0.858 & 0.801 \\
+\bottomrule
+\end{tabular}
+\end{table}

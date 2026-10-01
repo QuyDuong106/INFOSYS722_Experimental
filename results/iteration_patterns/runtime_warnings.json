@@ -1,0 +1,5 @@
+[
+  "divide by zero encountered in matmul",
+  "invalid value encountered in matmul",
+  "overflow encountered in matmul"
+]

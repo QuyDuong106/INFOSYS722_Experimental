@@ -1,0 +1,233 @@
+[
+  {
+    "node": 0,
+    "feature": "crp",
+    "threshold": 0.5850000083446503,
+    "n": 223,
+    "present_fraction": 0.5067264573991032
+  },
+  {
+    "node": 1,
+    "feature": "ecw",
+    "threshold": 15.099999904632568,
+    "n": 140,
+    "present_fraction": 0.7285714285714285
+  },
+  {
+    "node": 2,
+    "feature": "tfc",
+    "threshold": 19.949999809265137,
+    "n": 36,
+    "present_fraction": 0.4722222222222222
+  },
+  {
+    "node": 3,
+    "feature": "vitamin_d",
+    "threshold": 17.34999942779541,
+    "n": 24,
+    "present_fraction": 0.7083333333333334
+  },
+  {
+    "node": 4,
+    "feature": "alp",
+    "threshold": 57.0,
+    "n": 10,
+    "present_fraction": 0.4
+  },
+  {
+    "node": 5,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 6,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 6,
+    "present_fraction": 0.6666666666666666
+  },
+  {
+    "node": 7,
+    "feature": "vitamin_d",
+    "threshold": 24.920000076293945,
+    "n": 14,
+    "present_fraction": 0.9285714285714286
+  },
+  {
+    "node": 8,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.75
+  },
+  {
+    "node": 9,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 10,
+    "present_fraction": 1.0
+  },
+  {
+    "node": 10,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 12,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 11,
+    "feature": "bmi",
+    "threshold": 27.850000381469727,
+    "n": 104,
+    "present_fraction": 0.8173076923076923
+  },
+  {
+    "node": 12,
+    "feature": "alp",
+    "threshold": 49.5,
+    "n": 44,
+    "present_fraction": 0.9318181818181818
+  },
+  {
+    "node": 13,
+    "feature": "vitamin_d",
+    "threshold": 23.007142066955566,
+    "n": 10,
+    "present_fraction": 0.7
+  },
+  {
+    "node": 14,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.25
+  },
+  {
+    "node": 15,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 6,
+    "present_fraction": 1.0
+  },
+  {
+    "node": 16,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 34,
+    "present_fraction": 1.0
+  },
+  {
+    "node": 17,
+    "feature": "obesity_pct",
+    "threshold": 26.05500030517578,
+    "n": 60,
+    "present_fraction": 0.7333333333333333
+  },
+  {
+    "node": 18,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 5,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 19,
+    "feature": "vma_kg",
+    "threshold": 31.800000190734863,
+    "n": 55,
+    "present_fraction": 0.8
+  },
+  {
+    "node": 20,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 21,
+    "present_fraction": 0.6190476190476191
+  },
+  {
+    "node": 21,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 34,
+    "present_fraction": 0.9117647058823529
+  },
+  {
+    "node": 22,
+    "feature": "vitamin_d",
+    "threshold": 20.366666793823242,
+    "n": 83,
+    "present_fraction": 0.13253012048192772
+  },
+  {
+    "node": 23,
+    "feature": "vfa",
+    "threshold": 7.650000095367432,
+    "n": 48,
+    "present_fraction": 0.020833333333333332
+  },
+  {
+    "node": 24,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.25
+  },
+  {
+    "node": 25,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 44,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 26,
+    "feature": "vma_kg",
+    "threshold": 33.94999885559082,
+    "n": 35,
+    "present_fraction": 0.2857142857142857
+  },
+  {
+    "node": 27,
+    "feature": "crp",
+    "threshold": 2.7050000429153442,
+    "n": 31,
+    "present_fraction": 0.1935483870967742
+  },
+  {
+    "node": 28,
+    "feature": "height",
+    "threshold": 159.5,
+    "n": 14,
+    "present_fraction": 0.42857142857142855
+  },
+  {
+    "node": 29,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 1.0
+  },
+  {
+    "node": 30,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 10,
+    "present_fraction": 0.2
+  },
+  {
+    "node": 31,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 17,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 32,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 1.0
+  }
+]

@@ -1,0 +1,16 @@
+\begin{table}[H]
+\centering\small
+\caption{Executed training-CV alternatives: seed 42, RFE--CART. Winning configurations are selected within each family; scores are not test results.}
+\begin{tabular}{lp{0.8cm}p{6.5cm}r}
+\toprule
+Model & Trials & Best tested settings & CV AUC \\
+\midrule
+Logistic regression & 3 & C=0.1 & 0.8716 \\
+Random forest & 6 & max depth=5, min samples leaf=2 & 0.8475 \\
+XGBoost & 4 & learning rate=0.05, max depth=3 & 0.8446 \\
+LightGBM & 4 & learning rate=0.03, num leaves=7 & 0.8485 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Across seeds 42, 7, 21, 84 and 123, the selected logistic $C$ values are 0.1, 0.1, 0.1, 1 and 10. The figure below exposes the actual seed-42 alternatives, rather than only listing a proposed search grid. Source: \path{results/tuning/seed_42_*_cv.csv}.

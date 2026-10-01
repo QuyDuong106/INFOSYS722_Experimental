@@ -1,0 +1,14 @@
+{
+  "source_signature": "d14de55c7bec0a380289be7ecb459ab34d611980e1320e4e9875d84673bddffe",
+  "seeds": [
+    42,
+    7,
+    21,
+    84,
+    123
+  ],
+  "revision": "RFE top 20 to top 10; logistic C=1 unchanged",
+  "evaluation": "validation only; no test data accessed; exploratory reused validation",
+  "permutation_repeats": 20,
+  "variance_ddof": 1
+}

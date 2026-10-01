@@ -1,0 +1,16 @@
+\begin{table}[H]
+\centering\small
+\caption{Internal test performance of the validation-selected fixed procedure across five seeds. Ranges describe split variation, not confidence intervals.}
+\begin{tabular}{lll}
+\toprule
+Metric & Mean & Minimum--maximum \\
+\midrule
+ROC--AUC & 0.883 & 0.828--0.915 \\
+Sensitivity & 0.892 & 0.792--0.958 \\
+Specificity & 0.708 & 0.667--0.792 \\
+F1 & 0.816 & 0.769--0.846 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+These results come from \path{results/holdout/selected_test_metrics.csv}; selectors vary by seed. They describe the selected procedure, whereas the all-candidate tables in Section~\ref{subsec:statistical-patterns} describe individual models. Reused, overlapping test partitions limit independence.

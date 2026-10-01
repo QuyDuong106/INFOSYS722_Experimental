@@ -1,0 +1,6 @@
+seed,model,selection
+42,logistic,cart
+7,logistic,rfe
+21,logistic,cart
+84,logistic,rfe
+123,logistic,cart

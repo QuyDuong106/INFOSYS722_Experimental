@@ -1,0 +1,275 @@
+[
+  {
+    "node": 0,
+    "feature": "crp",
+    "threshold": 0.5850000083446503,
+    "n": 223,
+    "present_fraction": 0.5067264573991032
+  },
+  {
+    "node": 1,
+    "feature": "protein_pct",
+    "threshold": 15.0,
+    "n": 136,
+    "present_fraction": 0.7132352941176471
+  },
+  {
+    "node": 2,
+    "feature": "ast",
+    "threshold": 25.5,
+    "n": 46,
+    "present_fraction": 0.4782608695652174
+  },
+  {
+    "node": 3,
+    "feature": "protein_pct",
+    "threshold": 13.75,
+    "n": 32,
+    "present_fraction": 0.3125
+  },
+  {
+    "node": 4,
+    "feature": "hfa",
+    "threshold": 0.5,
+    "n": 16,
+    "present_fraction": 0.5625
+  },
+  {
+    "node": 5,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 7,
+    "present_fraction": 0.14285714285714285
+  },
+  {
+    "node": 6,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 9,
+    "present_fraction": 0.8888888888888888
+  },
+  {
+    "node": 7,
+    "feature": "vfa",
+    "threshold": 11.549999713897705,
+    "n": 16,
+    "present_fraction": 0.0625
+  },
+  {
+    "node": 8,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 12,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 9,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.25
+  },
+  {
+    "node": 10,
+    "feature": "gfr",
+    "threshold": 96.95999908447266,
+    "n": 14,
+    "present_fraction": 0.8571428571428571
+  },
+  {
+    "node": 11,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.5
+  },
+  {
+    "node": 12,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 10,
+    "present_fraction": 1.0
+  },
+  {
+    "node": 13,
+    "feature": "ecf_tbw",
+    "threshold": 39.8799991607666,
+    "n": 90,
+    "present_fraction": 0.8333333333333334
+  },
+  {
+    "node": 14,
+    "feature": "vfa",
+    "threshold": 10.994999885559082,
+    "n": 10,
+    "present_fraction": 0.3
+  },
+  {
+    "node": 15,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 5,
+    "present_fraction": 0.6
+  },
+  {
+    "node": 16,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 5,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 17,
+    "feature": "weight",
+    "threshold": 64.8499984741211,
+    "n": 80,
+    "present_fraction": 0.9
+  },
+  {
+    "node": 18,
+    "feature": "alp",
+    "threshold": 69.0,
+    "n": 18,
+    "present_fraction": 0.7222222222222222
+  },
+  {
+    "node": 19,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 13,
+    "present_fraction": 0.9230769230769231
+  },
+  {
+    "node": 20,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 5,
+    "present_fraction": 0.2
+  },
+  {
+    "node": 21,
+    "feature": "ldl",
+    "threshold": 81.5,
+    "n": 62,
+    "present_fraction": 0.9516129032258065
+  },
+  {
+    "node": 22,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.75
+  },
+  {
+    "node": 23,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 58,
+    "present_fraction": 0.9655172413793104
+  },
+  {
+    "node": 24,
+    "feature": "vitamin_d",
+    "threshold": 31.625,
+    "n": 87,
+    "present_fraction": 0.1839080459770115
+  },
+  {
+    "node": 25,
+    "feature": "crp",
+    "threshold": 0.949999988079071,
+    "n": 79,
+    "present_fraction": 0.13924050632911392
+  },
+  {
+    "node": 26,
+    "feature": "ast",
+    "threshold": 17.5,
+    "n": 16,
+    "present_fraction": 0.375
+  },
+  {
+    "node": 27,
+    "feature": "protein_pct",
+    "threshold": 17.559999465942383,
+    "n": 10,
+    "present_fraction": 0.1
+  },
+  {
+    "node": 28,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 6,
+    "present_fraction": 0.0
+  },
+  {
+    "node": 29,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.25
+  },
+  {
+    "node": 30,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 6,
+    "present_fraction": 0.8333333333333334
+  },
+  {
+    "node": 31,
+    "feature": "triglyceride",
+    "threshold": 305.5,
+    "n": 63,
+    "present_fraction": 0.07936507936507936
+  },
+  {
+    "node": 32,
+    "feature": "height",
+    "threshold": 152.0,
+    "n": 59,
+    "present_fraction": 0.05084745762711865
+  },
+  {
+    "node": 33,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 6,
+    "present_fraction": 0.3333333333333333
+  },
+  {
+    "node": 34,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 53,
+    "present_fraction": 0.018867924528301886
+  },
+  {
+    "node": 35,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.5
+  },
+  {
+    "node": 36,
+    "feature": "bm",
+    "threshold": 2.5,
+    "n": 8,
+    "present_fraction": 0.625
+  },
+  {
+    "node": 37,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 0.25
+  },
+  {
+    "node": 38,
+    "feature": "leaf",
+    "threshold": -2.0,
+    "n": 4,
+    "present_fraction": 1.0
+  }
+]
