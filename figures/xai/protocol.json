@@ -1,0 +1,38 @@
+{
+  "model": "logistic",
+  "evaluation": "Tuned Leave One Patient Out",
+  "source_results": "results/optuna_logistic",
+  "sampled_rows": [
+    73,
+    218,
+    25,
+    208,
+    9,
+    101,
+    176,
+    186,
+    63,
+    116,
+    279,
+    75,
+    164,
+    173,
+    211,
+    84,
+    185,
+    132,
+    314,
+    238
+  ],
+  "error_rows": {
+    "FN": 156,
+    "FP": 178
+  },
+  "background_rows": 25,
+  "shap_samples": 256,
+  "lime_samples": 3000,
+  "seed": 42,
+  "selection": "Most confident errors, selected retrospectively",
+  "dataset_signature": "d14de55c7bec0a380289be7ecb459ab34d611980e1320e4e9875d84673bddffe",
+  "interpretation": "Separate held-out fold models and training-only backgrounds"
+}

@@ -1,0 +1,30 @@
+\subsection{Leave One Patient Out Model Comparison}
+Logistic regression achieved the highest pooled AUC (0.874), while random forest achieved the highest accuracy (0.799), sensitivity (0.839), and F1 (0.808) among predictive models (Table~\ref{tab:building-lopo-results}). Logistic regression detected 132 of 161 positive records and correctly classified 118 of 158 controls; random forest detected 135 positive records and correctly classified 120 controls. Stacking had the highest specificity (0.772).
+
+\begin{table}[tbp]
+\centering
+\footnotesize
+\caption{Leave One Patient Out evaluation on 319 held-out predictions per model at threshold 0.5.}
+\label{tab:building-lopo-results}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Model & Accuracy & ROC--AUC & Sensitivity & Specificity & F1 & FNR \\
+\midrule
+Logistic regression & 0.784 & \textbf{0.874} & 0.820 & 0.747 & 0.793 & 0.180 \\
+Random forest & \textbf{0.799} & 0.857 & \textbf{0.839} & 0.759 & \textbf{0.808} & \textbf{0.161} \\
+XGBoost & 0.762 & 0.835 & 0.807 & 0.715 & 0.774 & 0.193 \\
+LightGBM & 0.787 & 0.851 & 0.832 & 0.741 & 0.798 & 0.168 \\
+Stacking & 0.787 & 0.865 & 0.801 & \textbf{0.772} & 0.791 & 0.199 \\
+\midrule
+Training-prior dummy & 0.505 & 0.000 & 1.000 & 0.000 & 0.671 & 0.000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+The training-prior dummy's pooled AUC of 0.000 is a leave-one-out artefact: excluding a positive record lowers its training prevalence, while excluding a negative record raises it. Its pooled probabilities therefore rank the classes inversely, even though every thresholded prediction is positive. The value is not evidence of useful discrimination.
+
+The single LOPO run compares fixed pipelines using the same excluded records; it does not estimate between-seed variability or the performance of a nested model-selection procedure.
+
+\subsection{Recurring classification errors}
+Source record 117 was a false negative in four of the five predictive LOPO models. Records 291 and 316 were false positives in all five. These retrospectively identified examples indicate disagreement between observed labels and predictions across model families, without establishing clinical causes or labelling errors. They support inspecting common failure cases in addition to aggregate discrimination and classification metrics.
+
+\input{xai_results}

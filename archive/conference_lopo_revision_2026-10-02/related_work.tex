@@ -1,0 +1,37 @@
+\label{sec:literature_review}
+\subsection{Gallstone classification from non-imaging measurements}
+Prior work investigates whether clinical, biochemical, and body-composition measurements contain information useful for gallstone classification. \textcite{esen2024early} compared conventional classifiers using laboratory and bioimpedance measurements from 319 participants, comprising 161 cases and 158 controls with 38 candidate predictors. Their released cohort forms the basis of the UCI Gallstone dataset used here \parencite{uci2025gallstone}. Gradient boosting achieved a reported accuracy of 85.42\%, motivating further investigation of non-imaging predictors. Separately, \textcite{salem2023ml} examined metabolites and clinical features associated with gallstone disease. These studies support multivariable classification, but differences in populations and evaluation protocols prevent direct comparison of their scores. In the present study, the target is existing gallstone status rather than future disease onset.
+
+\subsection{Feature selection, ensembles, and explainability}
+Subsequent studies on Gallstone-1 have emphasised feature selection and optimisation. With 38 predictors and only 319 observations, reducing dimensionality may simplify a model, but does not necessarily improve its performance on unseen records. \textcite{sarker2025gallstone} combined random forest with Sand Cat Swarm Optimization and used SHAP and DiCE for interpretation. Other approaches pair Rotation Forest with Bald Eagle Search, CatBoost with Sea Lion Optimization, or XGBoost with hybrid Bees--Bayesian optimisation \parencite{shrestha2026metaheuristic,das2026sloa,rahman2026hbb}. Table~\ref{tab:gallstone_literature} summarises the reported outcomes; they illustrate different trade-offs between model complexity, feature count, and discrimination rather than a common performance ranking.
+
+\begin{table}[tbp]
+\centering
+\small
+\caption{Selected Gallstone-1 studies. Results use each study's own evaluation protocol and are not directly comparable. Acc.: accuracy; AUC: ROC--AUC.}
+\label{tab:gallstone_literature}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}p{2.8cm}X X@{}}
+\toprule
+Study & Approach & Reported result or trade-off \\
+\midrule
+\textcite{esen2024early} & Conventional classifiers; gradient boosting & Best reported acc.\ 85.42\%. \\
+\textcite{sarker2025gallstone} & Swarm-optimised random forest & SHAP and DiCE add feature-level and counterfactual explanations. \\
+\textcite{shrestha2026metaheuristic} & Rotation Forest with Bald Eagle Search & 38 to 17 predictors; acc.\ 78.00\% to 75.79\%, AUC 0.867 to 0.861. \\
+\textcite{das2026sloa} & CatBoost with Sea Lion Optimization & 38 to 19 predictors; mean five-fold acc.\ 79.58\% to 80.42\%. \\
+\textcite{tamer2026novel} & Consensus feature selection with random forest & 11 selected predictors; acc.\ 90.62\%. \\
+\textcite{rahman2026hbb} & Bees--Bayesian XGBoost optimisation & Holdout acc.\ 87.50\%, AUC 0.9258; sensitivity 90.62\%. \\
+\textcite{indirani2026ensemble} & Stacking and calibrated soft voting & Stacking AUC 0.9307; calibrated voting acc.\ 87.50\% and positive-class recall approximately 94\%. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The evidence for optimisation is mixed. Rotation Forest's feature reduction was accompanied by lower test performance and a substantial training--testing gap, whereas CatBoost gained modest accuracy while approximately halving its feature count \parencite{shrestha2026metaheuristic,das2026sloa}. Consensus selection offers another strategy: \textcite{tamer2026novel} retained variables selected by at least seven of eight statistical and metaheuristic selectors before comparing classifiers. These findings motivate evaluating feature reduction against a controlled baseline rather than assuming that a smaller or more extensively tuned model generalises better.
+
+Ensemble studies also distinguish discrimination from threshold-dependent decisions. \textcite{indirani2026ensemble} used nested stratified cross-validation with training-stage feature selection, tuning, calibration, and threshold adjustment. Their stacking and voting results illustrate why accuracy alone is insufficient to characterise a classifier. Across the reviewed studies, SHAP, LIME, and counterfactual methods supplement performance metrics with explanations. CRP, vitamin D, and body-composition variables recur in these analyses \parencite{esen2024early,shrestha2026metaheuristic,das2026sloa}. Recurrence across models fitted to the same cohort, however, is not independent biological validation, and feature attribution does not establish causality.
+
+\subsection{Research gap and positioning of this study}
+The principal unresolved issue is the robustness of performance estimates from a small, repeatedly reused cohort. Different partitions, selected features, tuning budgets, and thresholds make headline scores unsuitable for ranking methods across publications. Training-only preprocessing and selection reduce leakage, while nested evaluation can account for model selection; neither substitutes for validation in an independent population. Calibration and clinical utility also require separate assessment rather than inference from accuracy or AUC.
+
+This study therefore asks whether additional model complexity consistently improves on an interpretable logistic-regression baseline under shared evaluation conditions. Random forest provides an established ensemble comparator \parencite{breiman2001randomforests}; gradient boosting and probability stacking extend the comparison. The analysis combines five stratified holdout splits, complementary record-level leave-one-out evaluation, and a controlled comparison of two CART-based selectors and feature counts. Its contribution is a reproducible internal comparison, not a new classifier or an independent clinical validation. Overlapping assessment partitions, the absence of calibration analysis, and the lack of external data remain limitations; the study does not claim to resolve them.

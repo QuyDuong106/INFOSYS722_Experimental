@@ -1,0 +1,56 @@
+\subsection{Dataset and outcome}
+The analysis used 319 records from the UCI Gallstone dataset, originating from a clinical study at Ankara VM Medical Park Hospital, Turkey, conducted between June 2022 and June 2023 \parencite{esen2024early,uci2025gallstone}. The dataset contains 161 gallstone cases, 158 controls, and 38 candidate predictors spanning demographic characteristics, comorbidities, anthropometry, bioimpedance, and laboratory measurements. No new primary data were collected.
+
+The modelling pipeline recoded source status 0 as class 1 (gallstones present), so sensitivity consistently refers to detection of the gallstone class. Source-row identifiers were used to trace predictions; they are not verified patient identifiers. Consequently, leave-one-out evaluation is described at the record level and is equivalent to leave-one-person-out only if each record represents a different person.
+
+\subsection{Preprocessing and feature selection}
+Continuous variables were median-imputed and categorical variables were imputed using their most frequent value. Two selectors retained 20 source predictors: direct CART importance and recursive feature elimination with CART (RFE--CART). Selection trees used maximum depth 5 and minimum leaf size 4; RFE removed one feature per step. Selected continuous variables underwent Yeo--Johnson transformation \parencite{yeo2000new} and standardisation, while categorical variables were one-hot encoded.
+
+All preparation was fitted within the relevant training partition, including inner cross-validation and stacking's base-model pipelines. A globally transformed reference CSV was not used as evaluation input. This distinction prevents the fitted preprocessing stages from learning from held-out observations.
+
+\subsection{Models and parameter search}
+Preprocessing and baseline estimation used scikit-learn \parencite{pedregosa2011scikit}. The predictive families were logistic regression, random forest, XGBoost, LightGBM, and stacking; a training-prior dummy provided a feature-free benchmark. Stacking used the four individual classifiers to generate out-of-fold probability inputs for a standardised logistic meta-classifier, without raw-feature passthrough. Table~\ref{tab:python-parameters} gives the fixed configurations and bounded tuning grids.
+
+\begin{table}[tbp]
+\centering
+\small
+\caption{Implemented fixed settings and training-only search spaces.}
+\label{tab:python-parameters}
+\begin{tabularx}{\textwidth}{@{}p{2.2cm}XX@{}}
+\toprule
+Model & Fixed settings & Tuning grid \\
+\midrule
+Logistic regression &
+$C=1$; maximum 3,000 iterations. &
+$C\in\{0.1,1,10\}$. \\
+Random forest &
+60 trees; maximum depth 5; minimum leaf size 4. &
+Depth $\{3,5,8\}$; leaf size $\{2,4\}$. \\
+XGBoost &
+60 trees; learning rate 0.05; depth 2; $\lambda=1$; row/column sampling 0.8;
+histogram tree method. &
+Depth $\{2,3\}$; learning rate $\{0.03,0.05\}$. \\
+LightGBM &
+60 trees; learning rate 0.05; 7 leaves; minimum child samples 20;
+column sampling 0.8. &
+Leaves $\{7,15\}$; learning rate $\{0.03,0.05\}$. \\
+Stacking &
+Three stratified inner folds; probability inputs; standardised logistic
+meta-model, $C=1$, maximum 3,000 iterations; no raw-feature passthrough. &
+Fixed benchmark, not tuned. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+A separate tuning analysis fixed RFE--CART and selected parameters for each individual family using three-fold stratified training cross-validation and mean ROC--AUC. The model family was then selected on validation data. Stacking remained a fixed benchmark. These searches do not establish globally optimal hyperparameters.
+
+\subsection{Evaluation and model selection}
+Five stratified splits used seeds 42, 7, 21, 84, and 123, each with 223 training, 48 validation, and 48 test records. Fixed candidates were ranked by descending validation AUC, descending accuracy, and ascending false-negative rate, followed by deterministic name-based tie-breaks. Selected configurations were refitted on the 271 development records before test assessment. Sensitivity was not a hard selection constraint.
+
+Complementary leave-one-out cross-validation evaluated fixed RFE--CART candidates using 318 training records per fold and one pooled held-out prediction for each of the 319 records. This procedure did not nest the entire model-family selection process. All classifications used threshold 0.5. AUC, sensitivity, specificity, accuracy, F1, and false-negative rate were used to distinguish ranking performance from threshold-dependent classification.
+
+Holdout summaries report means and sample variances across five seeds; ranges describe split variation and are not confidence intervals. Because partitions overlap, the seeds are not independent replications. The exploratory benchmarks of AUC and sensitivity at least 0.80 are study-specific targets, not established clinical acceptance criteria. Neither threshold optimisation nor a dedicated calibration assessment was implemented.
+
+\subsection{Feature-count comparison and interpretation}
+A paired development experiment compared RFE--CART selection of 20 and 10 predictors with logistic regression ($C=1$). Splits, transformations, and threshold were held fixed, and preprocessing was refitted on each training partition. Only validation records were evaluated in this follow-up experiment.
+
+Interpretation used transformed-scale logistic coefficients, CART rules, and validation permutation AUC decreases, with 20 shuffles per split. Saved held-out predictions were inspected for recurring errors. These analyses describe fitted associations and retrospective error patterns; they do not estimate causal effects.

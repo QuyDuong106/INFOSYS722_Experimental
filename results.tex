@@ -1,10 +1,10 @@
-\subsection{Leave One Patient Out Model Comparison}
+\subsection{Fixed-Parameter Leave One Patient Out Benchmarks}
 Logistic regression achieved the highest pooled AUC (0.874), while random forest achieved the highest accuracy (0.799), sensitivity (0.839), and F1 (0.808) among predictive models (Table~\ref{tab:building-lopo-results}). Logistic regression detected 132 of 161 positive records and correctly classified 118 of 158 controls; random forest detected 135 positive records and correctly classified 120 controls. Stacking had the highest specificity (0.772).
 
-\begin{table}[tbp]
+\begin{table*}[t]
 \centering
 \footnotesize
-\caption{Leave One Patient Out evaluation on 319 held-out predictions per model at threshold 0.5.}
+\caption{Fixed-parameter Leave One Patient Out evaluation on 319 held-out predictions per model at threshold 0.5.}
 \label{tab:building-lopo-results}
 \begin{tabular}{@{}lrrrrrr@{}}
 \toprule
@@ -19,10 +19,54 @@ Stacking & 0.787 & 0.865 & 0.801 & \textbf{0.772} & 0.791 & 0.199 \\
 Training-prior dummy & 0.505 & 0.000 & 1.000 & 0.000 & 0.671 & 0.000 \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 The training-prior dummy's pooled AUC of 0.000 is a leave-one-out artefact: excluding a positive record lowers its training prevalence, while excluding a negative record raises it. Its pooled probabilities therefore rank the classes inversely, even though every thresholded prediction is positive. The value is not evidence of useful discrimination.
 
 The single LOPO run compares fixed pipelines using the same excluded records; it does not estimate between-seed variability or the performance of a nested model-selection procedure.
 
-\subsection{Recurring classification errors}
+\subsection{Optuna-Tuned Leave One Patient Out Benchmarks}
+All five predictive families completed 319 outer folds with 20 Optuna trials and three stratified inner folds per outer training set. The source-data signature, feature count, seed, threshold, and dependency versions were identical across tuned runs. Table~\ref{tab:tuned-lopo-results} reports pooled held-out performance; hyperparameters were selected separately within each outer fold.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\caption{Optuna-tuned Leave One Patient Out evaluation: 319 held-out predictions per family, RFE--CART with 20 source predictors, and threshold 0.5. Bold marks the best predictive-family value in each rate column. FN: number of missed gallstone cases out of 161.}
+\label{tab:tuned-lopo-results}
+\begin{tabular}{@{}lrrrrrrr@{}}
+\toprule
+Model & Accuracy & ROC--AUC & Sensitivity & Specificity & F1 & FNR & FN \\
+\midrule
+Logistic regression & \textbf{0.787} & \textbf{0.868} & \textbf{0.826} & 0.747 & \textbf{0.796} & \textbf{0.174} & 28 \\
+Random forest & 0.774 & 0.842 & 0.807 & 0.741 & 0.783 & 0.193 & 31 \\
+XGBoost & 0.784 & 0.851 & \textbf{0.826} & 0.741 & 0.794 & \textbf{0.174} & 28 \\
+LightGBM & \textbf{0.787} & 0.840 & 0.814 & \textbf{0.759} & 0.794 & 0.186 & 30 \\
+Stacking & 0.784 & 0.862 & 0.807 & \textbf{0.759} & 0.790 & 0.193 & 31 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Tuned logistic regression retained the highest AUC (0.868) and F1 (0.796), with accuracy 0.787 and sensitivity 0.826. It detected 133 of 161 cases and correctly classified 118 of 158 controls. XGBoost matched its sensitivity and false-negative count (28), but had lower AUC (0.851) and one additional false positive (41 versus 40). LightGBM matched the highest accuracy (0.787), while LightGBM and stacking shared the highest specificity (0.759). Random forest achieved AUC 0.842 and sensitivity 0.807. Stacking did not exceed logistic regression in discrimination or sensitivity; only its logistic meta-learner was tuned, with fixed base-model settings.
+
+\subsection{Changes Relative to Fixed Configurations}
+XGBoost showed the largest positive change relative to its historical fixed benchmark: AUC increased from 0.835 to 0.851, accuracy from 0.762 to 0.784, and sensitivity from 0.807 to 0.826; false negatives decreased from 31 to 28. Logistic regression's AUC decreased from 0.874 to 0.868, although accuracy increased slightly and one fewer positive record was missed. Random forest's AUC decreased from 0.857 to 0.842, with five additional false negatives (26 to 31). LightGBM's accuracy was unchanged, but AUC decreased from 0.851 to 0.840 and false negatives increased from 27 to 30. Stacking's AUC decreased from 0.865 to 0.862; one fewer false negative was offset by two additional false positives.
+
+These differences are descriptive rather than evidence that tuning alone caused the changes. The historical fixed run used scikit-learn 1.7.1, whereas the tuned runs used 1.9.1; NumPy and pandas versions also differed. Although the cohort and outer record exclusions were shared, a controlled estimate of tuning's effect requires refitting the fixed configurations in the tuned environment. No significance test or confidence interval was calculated. Optimising inner-fold AUC did not consistently improve outer discrimination or classification at threshold 0.5, and the search budget does not establish globally optimal parameters.
+
+
+\subsection{Confusion Matrices and Average Classification Error}
+Figure~\ref{fig:experimental-confusion} reproduces the saved fixed-parameter Experimental LOPO ROC/confusion-matrix figure and adds a descriptive mean confusion matrix across the five predictive families in Table~\ref{tab:building-lopo-results}, excluding the dummy. Mean counts were 118.0 true negatives, 40.0 false positives, 29.0 false negatives, and 132.0 true positives. The mean classification error was $(40+29)/319=21.6\%$, with mean false-negative rate $29/161=18.0\%$. This averages model-specific counts on the same 319 held-out records; it is not an ensemble confusion matrix, an average across seeds, or a set of independent replications. Tuned logistic regression, which is explained in the XAI results, instead had 118 true negatives, 40 false positives, 28 false negatives, and 133 true positives.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.97\linewidth]{figures/evaluation/experimental_lopo_roc_confusion.png}
+\par\medskip
+\includegraphics[width=0.43\linewidth]{figures/evaluation/average_fixed_lopo_confusion.pdf}
+\caption{Fixed-parameter Experimental LOPO results at threshold 0.5. Top: existing ROC curves and the stacking confusion matrix (TN=122, FP=36, FN=32, TP=129). Bottom: arithmetic mean counts across logistic regression, random forest, XGBoost, LightGBM, and stacking, each evaluated on the same 319 records. The mean summarises model errors and does not represent predictions from a single classifier.}
+\label{fig:experimental-confusion}
+\end{figure*}
+
+\subsection{Recurring Classification Errors in Fixed Models}
 Source record 117 was a false negative in four of the five predictive LOPO models. Records 291 and 316 were false positives in all five. These retrospectively identified examples indicate disagreement between observed labels and predictions across model families, without establishing clinical causes or labelling errors. They support inspecting common failure cases in addition to aggregate discrimination and classification metrics.
+
+\input{xai_results}

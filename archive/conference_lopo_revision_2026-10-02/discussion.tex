@@ -1,0 +1,16 @@
+\subsection{Principal findings}
+Within this dataset, the more complex candidates did not consistently improve discrimination over logistic regression. Selection of logistic regression across all five holdout seeds supports its use as the leading research baseline, but does not demonstrate statistically significant superiority. Random forest's higher leave-one-out sensitivity illustrates that the strongest probability ranking and the best classification at threshold 0.5 are distinct objectives.
+
+The feature-count experiment suggests that aggressive reduction can remove complementary information without resolving false negatives. It does not establish that every selected predictor is necessary: RFE ranks variables for CART, which may not match their usefulness to logistic regression, and correlated measurements can substitute for one another. Grouped ablation and a logistic-compatible selector would help distinguish redundant from uniquely useful information.
+
+The negative CRP coefficient and positive vitamin D coefficient are conditional associations with existing gallstone status in this sample. They should not be interpreted as causal risk factors, treatment effects, or clinical thresholds. Likewise, training-tree cut-points and permutation importance quantify fitted patterns rather than externally validated biological relationships.
+
+\subsection{Limitations}
+The analysis relies on a small dataset from one clinical setting. A near-balanced case distribution does not establish predictive values or workload in a different population. Measurement availability, particularly for detailed bioimpedance variables, may further limit transferability.
+
+Although automated model selection excluded test scores, the fixed-model workflow evaluated every candidate on test partitions, and tuning reused those partitions. Exposure to these results permits informal test-driven decisions. Together with overlapping splits and prior exploration of the dataset, this means the reported test scores remain internal assessments rather than a sealed final evaluation. Leave-one-out analysis evaluates fixed pipelines, not the entire model-selection procedure, and its heavily overlapping training folds are not independent experiments.
+
+The study did not establish calibrated probabilities, optimise an operating threshold, quantify external generalisation, or demonstrate clinical benefit. Sample variances and ranges capture observed split variation but are not confidence intervals; the score differences do not establish statistical significance. Retrospective error inspection also cannot establish mislabelling or explain a record's clinical circumstances.
+
+\subsection{Implications for further research}
+Further work should place all feature, parameter, calibration, and threshold decisions inside a nested development procedure. A sensitivity-oriented threshold should be assessed jointly with specificity and the resulting assessment workload. Grouped feature ablation and prespecified subgroup evaluation could investigate measurement burden and uneven errors. An untouched external cohort is needed to examine transfer beyond this dataset. Because the outcome is existing gallstone status, prospective disease-onset prediction would require a different study design and outcome definition.

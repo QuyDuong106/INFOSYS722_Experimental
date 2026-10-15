@@ -1,0 +1,142 @@
+\section{Literature Review}
+\label{sec:literature_review}
+
+\subsection{Machine Learning for Gallstone Disease Prediction}
+
+Gallstone disease is a common hepatobiliary disorder whose development is associated with demographic, metabolic, inflammatory, and body-composition factors. Conventional diagnosis generally relies on imaging techniques such as ultrasonography; however, recent studies have investigated whether routinely collected clinical, biochemical, and bioimpedance measurements can support earlier and less invasive risk prediction. The release of the Gallstone-1 dataset has facilitated this research by providing a structured tabular dataset suitable for evaluating machine-learning approaches to gallstone classification.
+
+The Gallstone-1 dataset originates from the study by Esen et al.~\cite{esen2024early}, which investigated whether gallstone disease could be predicted from laboratory and bioimpedance measurements without directly relying on imaging features. The study analysed approximately 319 participants, including 161 patients with gallstone disease and 158 controls, using 38 predictors covering demographic information, anthropometric and body-composition measurements, and biochemical indicators. The evaluated algorithms included Logistic Regression (LR), Support Vector Machine (SVM), K-Nearest Neighbours (KNN), Decision Tree (DT), Random Forest (RF), Gradient Boosting (GB), AdaBoost, Naive Bayes, and Multi-Layer Perceptron (MLP).
+
+Among these conventional approaches, Gradient Boosting achieved the highest reported accuracy of approximately 85.42\%~\cite{esen2024early}. The study further identified variables including vitamin D, C-reactive protein (CRP), total body water, and lean body mass as potentially important predictors. These findings established an important baseline for subsequent research using the Gallstone-1 dataset and demonstrated that meaningful predictive information is present in routinely measured non-imaging variables.
+
+\subsection{Feature Selection and Metaheuristic Optimisation}
+
+Following the initial benchmark study, later research focused increasingly on feature selection and model optimisation. This direction is particularly relevant to Gallstone-1 because the dataset contains a relatively large number of predictors compared with its small sample size. Consequently, redundant or weakly informative predictors may increase model variance and contribute to overfitting.
+
+Sarker et al.~\cite{sarker2025gallstone} proposed an optimised Random Forest framework in which the Sand Cat Swarm Optimization (SCSO) algorithm was used to improve gallstone classification. In addition to predictive modelling, the study incorporated SHAP and DiCE to provide feature-level explanations and counterfactual examples. This represented a transition from purely predictive modelling toward explainable clinical decision-support systems.
+
+A related approach was proposed by Shrestha et al.~\cite{shrestha2026metaheuristic}, who combined Rotation Forest with the Bald Eagle Search Algorithm (BESA). BESA reduced the feature space from 38 to 17 predictors. However, feature reduction did not translate into improved predictive performance. The baseline Rotation Forest achieved approximately 78.00\% test accuracy and an AUC of 0.867, whereas the optimised Rotation Forest--BESA model achieved approximately 75.79\% accuracy and an AUC of 0.861.
+
+An important observation from this study is the substantial difference between training and testing performance. Training performance reached approximately 100\% across folds, whereas test accuracy remained between approximately 76\% and 78\%. This discrepancy indicates a considerable risk of overfitting and demonstrates that optimisation or feature reduction does not necessarily improve model generalisation. Nevertheless, SHAP and LIME analyses consistently identified CRP, vitamin D, and several obesity and body-composition variables as influential predictors~\cite{shrestha2026metaheuristic}.
+
+Das et al.~\cite{das2026sloa} similarly investigated optimisation through a Sea Lion Optimization Algorithm (SLOA) combined with CatBoost. The original CatBoost model using all 38 predictors obtained mean five-fold cross-validation accuracy of approximately 79.58\%, while the SLOA-optimised model selected 19 variables and achieved approximately 80.42\%. The corresponding mean F1-score increased from 79.01\% to approximately 79.94\%.
+
+Although the performance improvement was relatively modest, the optimised model reduced the number of required predictors by approximately half. SHAP, LIME, and DiCE were subsequently employed to explain the resulting predictions. Similar to previous work, CRP and vitamin D were repeatedly identified as highly influential variables~\cite{das2026sloa}. This consistency across different machine-learning algorithms suggests that these variables may reflect stable underlying signals rather than model-specific artefacts.
+
+Another optimisation strategy was introduced by Rahman~\cite{rahman2026hbb}, who proposed HBB-Opt, a hybrid framework combining the global exploration capability of the Bees Algorithm with Bayesian optimisation for XGBoost hyperparameter tuning. The default XGBoost model achieved approximately 82.81\% accuracy and an ROC-AUC of 0.9092 on the final holdout set. HBB-Opt increased accuracy to 87.50\%, ROC-AUC to 0.9258, sensitivity to 90.62\%, and Matthews Correlation Coefficient (MCC) to 0.7515.
+
+These studies demonstrate that metaheuristic optimisation can improve particular aspects of predictive performance or reduce feature dimensionality. However, the improvements are generally incremental, and the additional optimisation complexity does not consistently produce superior out-of-sample performance.
+
+\subsection{Ensemble Feature Selection}
+
+Rather than optimising a single classifier, Tamer et al.~\cite{tamer2026novel} investigated whether combining several independent feature-selection approaches could produce a more reliable subset of gallstone predictors. Their framework combined four statistical feature-selection techniques---minimum Redundancy Maximum Relevance (mRMR), Chi-square, Analysis of Variance (ANOVA), and Kruskal--Wallis---with four metaheuristic techniques: Grey Wolf Optimization (GWO), Whale Optimization Algorithm (WOA), Harris Hawks Optimization (HHO), and Particle Swarm Optimization (PSO).
+
+Variables selected by at least seven of the eight approaches were retained, reducing the original 38 predictors to 11. Nine classification algorithms were subsequently evaluated using this feature subset. Random Forest achieved a reported accuracy of 90.62\%, which was the highest headline accuracy identified among the studies reviewed~\cite{tamer2026novel}.
+
+The results suggest that removing redundant variables may be particularly beneficial for Gallstone-1, where the ratio of predictors to observations is relatively high. Nevertheless, comparison of the 90.62\% result with results from other studies should be performed cautiously because preprocessing, feature selection, hyperparameter optimisation, and validation procedures differ substantially across publications. A model achieving higher accuracy under one experimental protocol cannot necessarily be considered superior to another model evaluated under more conservative validation.
+
+\subsection{Ensemble Learning, Calibration, and Explainability}
+
+Recent studies have increasingly moved from individual models toward heterogeneous ensembles. Indirani et al.~\cite{indirani2026ensemble} proposed an ensemble-learning framework combining Random Forest, XGBoost, Logistic Regression, Gradient Boosting, Extra Trees, LightGBM, and SVM.
+
+An important methodological contribution of this work is its use of nested stratified cross-validation. Feature selection, SHAP analysis, hyperparameter optimisation, calibration, and threshold optimisation were performed within the training process rather than using information from the outer evaluation folds. This design reduces the risk of information leakage and optimistic performance estimates.
+
+The RF--XGBoost stacking configuration with a Logistic Regression meta-learner achieved approximately 85.94\% accuracy and an ROC-AUC of 0.9307~\cite{indirani2026ensemble}. A seven-model soft-voting ensemble initially obtained approximately 79.69\% accuracy. However, after probability calibration and decision-threshold adjustment, its accuracy increased to approximately 87.50\%, while recall for gallstone-positive patients reached approximately 94\%.
+
+These results highlight an important distinction between maximising overall classification accuracy and designing a clinically useful decision system. In medical screening applications, false-negative predictions may be more consequential than false positives. Therefore, threshold optimisation to increase sensitivity may be preferable even when it does not maximise conventional accuracy.
+
+The increasing use of SHAP, LIME, and counterfactual explanations across the reviewed literature also reflects the importance of interpretability in clinical machine learning. Rather than only producing predicted classes, these methods identify which clinical or biochemical measurements contribute most strongly to an individual prediction. This may improve the transparency of machine-learning systems and allow clinicians to evaluate whether model predictions are consistent with plausible clinical evidence.
+
+\subsection{Comparison of Existing Studies}
+
+Table~\ref{tab:gallstone_literature} summarises the principal modelling approaches and results identified in the Gallstone-1 literature.
+
+\begin{table*}[htbp]
+\centering
+\caption{Summary of machine-learning studies using the Gallstone-1 dataset.}
+\label{tab:gallstone_literature}
+\small
+\begin{tabular}{p{2.6cm} p{3.4cm} p{4.6cm} p{4.1cm}}
+\hline
+\textbf{Study} & \textbf{Method} & \textbf{Main Results} & \textbf{Key Observation} \\
+\hline
+
+Esen et al.~\cite{esen2024early}
+&
+GB, RF, SVM, LR, KNN, MLP and other conventional ML models
+&
+Best reported accuracy approximately 85.42\%
+&
+Established the original machine-learning baseline and highlighted vitamin D, CRP and body-composition variables.
+\\[0.2cm]
+
+Shrestha et al.~\cite{shrestha2026metaheuristic}
+&
+Rotation Forest + Bald Eagle Search; SHAP and LIME
+&
+RoF: 78.00\% accuracy, AUC 0.867; optimised model: 75.79\%, AUC 0.861
+&
+Feature reduction did not improve predictive performance; large training--testing gap indicates overfitting risk.
+\\[0.2cm]
+
+Das et al.~\cite{das2026sloa}
+&
+CatBoost + Sea Lion Optimization; SHAP, LIME and DiCE
+&
+Accuracy increased from 79.58\% to 80.42\%; features reduced from 38 to 19
+&
+Optimisation produced modest performance gain but substantial dimensionality reduction.
+\\[0.2cm]
+
+Indirani et al.~\cite{indirani2026ensemble}
+&
+Stacking and soft-voting ensemble with nested CV and calibration
+&
+Stacking AUC 0.9307; calibrated voting accuracy 87.50\% with positive-class recall of approximately 94\%
+&
+Strong validation design; demonstrates the importance of calibration and threshold selection.
+\\[0.2cm]
+
+Tamer et al.~\cite{tamer2026novel}
+&
+Eight-method consensus feature selection + RF
+&
+RF achieved 90.62\% accuracy using 11 selected predictors
+&
+Highest headline accuracy identified, while greatly reducing dimensionality.
+\\[0.2cm]
+
+Rahman~\cite{rahman2026hbb}
+&
+XGBoost + hybrid Bees--Bayesian optimisation + SHAP
+&
+87.50\% accuracy, AUC 0.9258, sensitivity 90.62\%, MCC 0.7515
+&
+Hybrid optimisation improved discrimination and sensitivity compared with default XGBoost.
+\\
+
+\hline
+\end{tabular}
+\end{table*}
+
+\subsection{Critical Synthesis and Research Gap}
+
+Several common findings emerge from the existing literature. First, tree-based ensemble methods such as Random Forest, Gradient Boosting, XGBoost, CatBoost, and related ensemble variants consistently perform strongly on the Gallstone-1 dataset. This is unsurprising because these algorithms are well suited to relatively small tabular datasets containing nonlinear relationships and interactions between predictors.
+
+Second, feature selection appears particularly important. Gallstone-1 contains approximately 38 predictors but only around 319 observations, creating a relatively high-dimensional problem given the available sample size. Several studies therefore report improvements in either predictive performance or model simplicity after eliminating redundant variables. The 11-feature consensus model proposed by Tamer et al.~\cite{tamer2026novel} provides a particularly strong example of this approach.
+
+Third, CRP and vitamin D repeatedly appear among the most important predictors across independent modelling approaches. These variables are highlighted by conventional feature-importance analysis as well as SHAP and LIME explanations in several studies~\cite{esen2024early,shrestha2026metaheuristic,das2026sloa,indirani2026ensemble}. The recurrence of these predictors across different models is potentially more scientifically meaningful than relatively small differences in classification accuracy between optimisation algorithms.
+
+However, the existing literature also presents substantial limitations. Most importantly, almost all subsequent machine-learning studies reuse the same small Gallstone-1 cohort. Consequently, improvements in cross-validation accuracy represent algorithmic improvements on a single dataset rather than independent evidence that the models generalise to new clinical populations.
+
+The small sample size also creates a substantial risk of overfitting, particularly when feature selection and hyperparameter optimisation are repeatedly performed on the same observations. This risk is illustrated by the Rotation Forest study, in which training performance approached 100\% while test accuracy remained below 80\%~\cite{shrestha2026metaheuristic}. Feature selection, transformation, hyperparameter optimisation, and threshold selection should therefore be performed exclusively within training folds.
+
+Among the reviewed studies, the nested-validation framework of Indirani et al.~\cite{indirani2026ensemble} provides one of the more rigorous approaches to controlling this problem. Nevertheless, even nested cross-validation cannot establish clinical generalisability when all folds originate from the same underlying institution and patient population.
+
+A further limitation is that reported performance values are not directly comparable across studies. Different authors employ different train--test partitions, cross-validation schemes, selected feature subsets, hyperparameter optimisation procedures, and classification thresholds. For example, an accuracy of 90.62\% obtained following feature selection cannot automatically be considered superior to an accuracy of 87.50\% obtained using nested cross-validation and an independently adjusted decision threshold. A valid comparison requires all candidate models to be evaluated using identical preprocessing and evaluation partitions.
+
+Finally, most existing work focuses predominantly on discrimination metrics such as accuracy, F1-score, and ROC-AUC. For clinical prediction, additional consideration should be given to sensitivity, specificity, positive and negative predictive values, calibration, Brier score, calibration slope, and clinical utility. A model that produces well-calibrated probabilities and high sensitivity may be more useful for early screening than a model with slightly higher overall accuracy.
+
+Consequently, an important research opportunity is not simply to introduce another optimisation algorithm, but to evaluate conventional and advanced machine-learning models under a controlled and reproducible experimental framework. Such a framework should apply identical stratified data partitions across models, perform all preprocessing and feature selection strictly within the training data, examine stability across repeated splits, evaluate both discrimination and calibration, and analyse the consistency of selected predictors.
+
+Ultimately, the major unresolved issue is \textit{external validity}. Future research should validate Gallstone-1-derived models on larger, independent, and preferably multicentre patient cohorts. The incorporation of additional information such as lifestyle characteristics, dietary factors, genetic variables, longitudinal measurements, and imaging information may further improve prediction. Until such external validation is available, performance reported on Gallstone-1 should primarily be interpreted as evidence of model feasibility rather than evidence of clinical deployment readiness.

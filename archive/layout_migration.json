@@ -1,0 +1,17 @@
+{
+  "gallstone_eda.ipynb": "notebooks/gallstone_eda.ipynb",
+  "holdout_method.ipynb": "notebooks/holdout_method.ipynb",
+  "transformation_feature_engineering.ipynb": "notebooks/transformation_feature_engineering.ipynb",
+  "tuning_model.ipynb": "notebooks/tuning_model.ipynb",
+  "leave_one_out_method.ipynb": "notebooks/leave_one_out_method.ipynb",
+  "error_analysis.ipynb": "notebooks/error_analysis.ipynb",
+  "dataset_gallstone": "data/raw/dataset_gallstone",
+  "dataset_gallstone.xlsx": "data/raw/dataset_gallstone.xlsx",
+  "transformed_dataset": "data/processed",
+  "model_holdout": "models/holdout",
+  "model_lopo": "models/lopo",
+  "model_tuned": "models/tuned",
+  "iteration_pattern_analysis.py": "scripts/iteration_pattern_analysis.py",
+  "test_notebook_workflow.py": "tests/test_notebook_workflow.py",
+  "dugn944_Iteration3.pdf": "Report/dugn944_Iteration3.pdf"
+}

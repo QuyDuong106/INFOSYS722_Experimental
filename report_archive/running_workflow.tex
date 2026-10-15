@@ -1,0 +1,145 @@
+This appendix explains how to run the submitted Iteration 3 Python/Jupyter
+workflow. All commands below are run from the \path{Iteration3_OpenStack}
+directory unless stated otherwise. Keep the supplied directory structure intact.
+
+\subsection{Environment and Required Files}
+
+Install Python and create a dedicated virtual environment. The submitted
+notebooks record Python 3.13.5; package requirements are minimum versions rather
+than an exact environment lock. On macOS or Linux, run:
+
+\begin{verbatim}
+cd INFOSYS722/Iteration3_OpenStack
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python -m ipykernel install --sys-prefix \
+  --name gallstone-iteration3 \
+  --display-name "Gallstone Iteration 3"
+\end{verbatim}
+
+On Windows PowerShell, create the environment with
+\texttt{python -m venv .venv} and activate it using
+\path{.venv\Scripts\Activate.ps1}. Run the kernel-install command on one line,
+omitting the shell continuation backslashes.
+
+The active modelling workflow requires \path{data/raw/dataset_gallstone},
+which is a CSV file with no extension. Preserve its filename and row order.
+The accompanying \path{data/raw/dataset_gallstone.xlsx} is also supplied, but
+does not replace the extensionless CSV used by the modelling functions.
+Keep \path{utils.py}, \path{modeling.py}, \path{requirements.txt},
+\path{run_workflow.py}, and the \path{notebooks/}, \path{scripts/},
+\path{tests/} and \path{Report/} directories together with the raw data.
+
+\subsection{Run the Complete Workflow}
+
+The runner executes the stages sequentially and stops if a stage fails:
+
+\begin{verbatim}
+python run_workflow.py --list
+python run_workflow.py
+\end{verbatim}
+
+The first command only lists the stages; the second runs the complete analysis,
+regenerates report figures and tables, and runs the workflow checks. Execution
+overwrites notebook outputs, generated data, result files and saved models.
+Use a separate copy of the submission to preserve the supplied results.
+Each execution records Python and installed package versions in
+\path{results/runs/}. Leave-one-out evaluation and stacking involve many model
+fits and can take substantially longer than the other stages.
+
+The execution order and main outputs are:
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Exploration (\texttt{eda}):}
+  \path{notebooks/gallstone_eda.ipynb} explores the original data.
+  \item \textbf{Preparation (\texttt{prepare}):}
+  \path{notebooks/transformation_feature_engineering.ipynb} exports
+  training-fitted transformations and partitions to \path{data/processed/}.
+  \item \textbf{Holdout evaluation (\texttt{holdout}):}
+  \path{notebooks/holdout_method.ipynb} writes metrics and predictions to
+  \path{results/holdout/} and pipelines to \path{models/holdout/}.
+  \item \textbf{Leave-one-out evaluation (\texttt{lopo}):}
+  \path{notebooks/leave_one_out_method.ipynb} evaluates 319 held-out rows
+  per model family and writes \path{results/lopo/} and \path{models/lopo/}.
+  \item \textbf{Parameter tuning (\texttt{tuning}):}
+  \path{notebooks/tuning_model.ipynb} writes search and evaluation results
+  to \path{results/tuning/} and selected models to \path{models/tuned/}.
+  \item \textbf{Error analysis (\texttt{errors}):}
+  \path{notebooks/error_analysis.ipynb} reads saved predictions and writes
+  \path{results/error_analysis/}.
+  \item \textbf{Iteration comparison (\texttt{patterns}):}
+  \path{scripts/iteration_pattern_analysis.py} compares the 20- and
+  10-predictor references and writes \path{results/iteration_patterns/}.
+  \item \textbf{Report outputs (\texttt{figures}):}
+  \path{Report/build_modeling_figures.py} regenerates modelling figures
+  and evidence tables in \path{Report/figures/modeling/} and
+  \path{Report/generated/} from saved results.
+  \item \textbf{Verification (\texttt{check}):} unit checks cover preparation
+  isolation, saved-pipeline prediction consistency and disease-positive
+  label/false-negative-rate coding.
+\end{enumerate}
+
+For interactive execution, run \texttt{python -m jupyter lab}, select the
+\textbf{Gallstone Iteration 3} kernel and use \textbf{Restart Kernel and Run
+All Cells} for each of the six notebooks in the order above. Complete each
+notebook before opening the next stage, then run:
+
+\begin{verbatim}
+python scripts/iteration_pattern_analysis.py
+python Report/build_modeling_figures.py
+python -m unittest discover -s tests -v
+\end{verbatim}
+
+\subsection{Resume Execution and Check Results}
+
+To restart at a failed stage, use \texttt{--from-stage}. To run just one stage,
+also specify \texttt{--to-stage}, for example:
+
+\begin{verbatim}
+python run_workflow.py --from-stage tuning
+python run_workflow.py --from-stage holdout --to-stage holdout
+python run_workflow.py --from-stage check
+\end{verbatim}
+
+Stage selection does not rebuild prerequisites: tuning requires prepared data,
+and complete error analysis requires the preceding evaluation results. After
+changing data, seeds, preparation or model settings, rerun from
+\texttt{prepare} through the end; rerun exploration when raw data change.
+An interrupted stage is not a completed result.
+
+Check \path{data/processed/manifest.json} and split-membership files for seeds
+42, 7, 21, 84 and 123, with 223 training, 48 validation and 48 test rows per
+seed. A complete fixed holdout run produces 120 metric rows and 5,760 prediction
+rows; LOPO produces six metric rows and 1,914 predictions; tuning produces
+25 metric rows and 1,200 predictions. These appear in the respective
+\path{results/holdout/}, \path{results/lopo/} and \path{results/tuning/}
+directories as \path{metrics.csv} and \path{predictions.csv}.
+The checks verify selected workflow invariants rather than every reported score.
+
+Fixed seeds support repeatability within an environment, but package and
+platform differences can change exact results. Supplied pickle files require
+compatible library versions; if incompatible, regenerate preparation and
+models from \texttt{prepare} onward in the new environment. Evaluation must
+use the training-fitted partitions, not a new random split of the full-data
+\path{transformed_dataset.csv}.
+
+\subsection{Rebuild the Report PDF}
+
+With saved results present, regenerate the modelling figures and tables without
+retraining using the first command below. Install a LaTeX distribution with
+\texttt{latexmk}, \texttt{pdflatex}, Biber and the packages declared in
+\path{Report/main.tex}, then compile:
+
+\begin{verbatim}
+python Report/build_modeling_figures.py
+latexmk -pdf -interaction=nonstopmode -halt-on-error \
+  -cd Report/main.tex
+\end{verbatim}
+
+On PowerShell, enter the \texttt{latexmk} command on one line without the
+continuation backslash. The compiled report is \path{Report/main.pdf}.
+Retain all report source files, \path{references.bib}, \path{media/}, figures
+and generated tables. Figure generation does not update earlier exploratory
+images or manually written tables and discussion; reconcile those passages
+with any changed results before compiling the final report.

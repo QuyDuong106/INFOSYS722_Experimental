@@ -1,0 +1,25 @@
+{
+  "strategy": "holdout",
+  "data": "/Users/quyduong106/projects/INFOSYS722/Iteration3_OpenStack/dataset_gallstone",
+  "target": "gallstone_status",
+  "id_columns": [
+    "record_id"
+  ],
+  "seeds": [
+    42,
+    7,
+    21,
+    84,
+    123
+  ],
+  "models": [
+    "logistic",
+    "random_forest",
+    "xgboost",
+    "lightgbm",
+    "stacking"
+  ],
+  "threshold": 0.5,
+  "variance_ddof": 1,
+  "seed_scope": "split, estimator and inner stacking CV randomness"
+}

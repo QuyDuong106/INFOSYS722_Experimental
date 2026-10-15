@@ -1,0 +1,51 @@
+\subsection{Dataset and outcome}
+The analysis used 319 records from the UCI Gallstone dataset, originating from a clinical study at Ankara VM Medical Park Hospital, Turkey, conducted between June 2022 and June 2023 \parencite{esen2024early,uci2025gallstone}. The cohort comprises 161 gallstone cases, 158 controls, and 38 demographic, comorbidity, anthropometric, bioimpedance, and laboratory predictors. No new primary data were collected. Source status 0 was recoded as class 1 (gallstones present), so sensitivity refers to detection of gallstones. Source-row identifiers trace predictions and are excluded from predictors; they are not verified patient identifiers.
+
+\subsection{Fold-specific preprocessing and feature selection}
+Within each outer training fold, continuous variables were median-imputed and categorical variables mode-imputed. Recursive feature elimination with a classification and regression tree (RFE--CART) retained 20 source predictors, removing one feature per step. The selection tree used maximum depth 5 and minimum leaf size 4. Selected continuous variables underwent Yeo--Johnson transformation \parencite{yeo2000new} and standardisation; categorical variables were one-hot encoded.
+
+Every learned preparation stage was fitted using training records only and then applied to the excluded record. For stacking, preprocessing and supervised selection were additionally refitted within each inner training fold used to construct meta-model inputs. The globally transformed reference CSV was not an evaluation input. This design prevents the excluded record from informing imputation, selection, or transformation.
+
+\subsection{Fixed model configurations}
+Five predictive families were evaluated: logistic regression, random forest, XGBoost, LightGBM, and stacking. A training-prior dummy classifier provided a feature-free benchmark. Preprocessing and baseline estimation used scikit-learn \parencite{pedregosa2011scikit}. Table~\ref{tab:python-parameters} summarises the implemented fixed settings. The fixed benchmark used these settings without hyperparameter search; the additional nested tuning procedure is described below.
+
+\begin{table}[tbp]
+\centering
+\small
+\caption{Fixed configurations used in the Leave One Patient Out comparison. Random-state settings used seed 42.}
+\label{tab:python-parameters}
+\begin{tabularx}{\linewidth}{@{}p{2.7cm}X@{}}
+\toprule
+Model & Configuration \\
+\midrule
+Logistic regression & $C=1$; maximum 3,000 iterations. \\
+Random forest & 60 trees; maximum depth 5; minimum leaf size 4. \\
+XGBoost & 60 trees; learning rate 0.05; depth 2; $\lambda=1$; row and column sampling 0.8; histogram tree method. \\
+LightGBM & 60 trees; learning rate 0.05; 7 leaves; minimum child samples 20; column sampling 0.8. \\
+Stacking & Four individual classifiers as base learners; three stratified inner folds; probability inputs to a standardised logistic meta-model ($C=1$, maximum 3,000 iterations); no raw-feature passthrough. \\
+Training-prior dummy & Class probabilities estimated from the outer training fold. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Leave One Patient Out Evaluation Protocol}
+LOPO was the sole evaluation strategy reported in this study. For each record $i$, the entire pipeline was fitted on the remaining 318 records and generated a probability $\hat{p}_i$ for the excluded record. Repeating this process across all 319 records produced exactly one out-of-fold prediction per record and per model. The implementation uses record-level leave-one-out cross-validation; it is equivalent to leave-one-patient-out only under the assumption that each record represents a distinct person. Repeated observations from the same person would instead require grouped exclusion.
+
+Metrics were computed from the pooled out-of-fold predictions, rather than averaged over single-record folds. ROC--AUC measured discrimination, while accuracy, sensitivity, specificity, precision, F1, and false-negative rate characterised classification at the fixed threshold $\hat{p}_i\geq0.5$. False-negative rate was defined as $\mathrm{FN}/(\mathrm{TP}+\mathrm{FN})$. Pooling is necessary because a single excluded observation cannot support a fold-level AUC or a complete confusion matrix. Seed 42 controlled estimator randomness and stacking's stratified inner folds; the outer LOPO partitions themselves are deterministic.
+
+Each fixed pipeline was assessed separately. Selecting the highest-scoring family retrospectively does not provide an unbiased estimate of a subsequent model-selection procedure: that would require nesting selection within each outer training fold. The 319 folds have heavily overlapping training sets and are not independent replications. A single LOPO run therefore supplies neither between-seed variance nor evidence of statistically significant model differences. No threshold optimisation, dedicated calibration assessment, or external validation was performed.
+
+\subsection{Nested Optuna Hyperparameter Tuning}
+For each excluded record and each predictive family, Optuna conducted 20 sequential trials on the remaining 318 records. A seeded tree-structured Parzen estimator maximised mean ROC--AUC across three stratified inner folds. Each trial refitted imputation, RFE--CART, transformation, and classification within the inner training folds. The best tested configuration was then refitted on all 318 outer training records to predict the excluded record. The feature count remained 20 and the classification threshold remained 0.5. Each family was tuned separately; model-family selection was not included within the outer evaluation.
+
+Logistic regression searched $C\in[0.01,100]$ on a logarithmic scale. Random forest searched 40--160 trees (step 20), depth 2--8, minimum leaf size 2--10, and feature sampling from $\{\text{sqrt},0.5,1.0\}$. XGBoost and LightGBM searched 40--160 trees, learning rate 0.01--0.15, column sampling 0.6--1.0, and $\lambda$ 0.1--10; learning rate and regularisation used logarithmic sampling. XGBoost additionally searched depth 1--4 and row sampling 0.6--1.0. LightGBM searched 3--15 leaves and minimum child samples 10--40. Stacking searched only the logistic meta-learner's $C$ over 0.01--100, with the four base learners fixed. The prior dummy was not tuned.
+
+Completed trial histories, best parameters, excluded-record predictions, configuration metadata, and fold checkpoints were saved separately from historical fixed results. Tuned runs used Optuna 5.0.0, scikit-learn 1.9.1, NumPy 2.5.3, pandas 3.0.6, XGBoost 3.4.1, and LightGBM 4.7.0. This nested design excludes the outer record from parameter selection, but does not eliminate optimism associated with prior dataset exploration or retrospective choice among model families.
+
+\subsection{Error analysis and reproducibility}
+Saved out-of-fold probabilities, labels, and source-row identifiers supported retrospective comparison of false negatives and false positives across model families. Records repeatedly misclassified by different families were treated as descriptive examples, not evidence of mislabelling, causal mechanisms, or future error prevalence. After evaluation, each pipeline was refitted on all 319 records for persistence. These full-data models were not used to calculate the reported LOPO metrics. The saved configuration records the seed, selector, feature count, and dataset signature to link results to the evaluated data.
+
+\subsection{Explainable Model Analysis}
+An additional post-tuning analysis examined logistic regression, which had the highest pooled AUC among the completed Optuna-tuned families (0.868). Explanations reconstructed the selected pipeline for each excluded record and verified its probability against the saved outer prediction. Thus, these figures concern the tuned model rather than the fixed configurations in Table~\ref{tab:building-lopo-results}. Selecting logistic regression for interpretation after inspecting outer scores is retrospective and does not evaluate a nested family-selection procedure.
+
+Kernel SHAP \parencite{lundberg2017shap} explained the complete raw-feature pipeline in probability units using 25 background records drawn only from the relevant outer training fold and 256 perturbation samples. A fixed random sample of 20 excluded records supported the global summary; each record was explained with its own fold model and background. LIME \parencite{ribeiro2016lime} used 3,000 perturbations, training-only categorical frequencies and continuous discretisation, and eight displayed conditions. The most confident false negative and false positive were selected retrospectively for local illustration. Local surrogate $R^2$ was reported to assess fidelity. Attributions quantify fitted model behaviour rather than causal or clinically validated effects.

@@ -1,25 +1,27 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage[margin=2.5cm]{geometry}
+\documentclass[conference]{IEEEtran}
 \usepackage[T1]{fontenc}
-\usepackage{lmodern}
+\renewcommand{\ttdefault}{lmtt}
 \usepackage{graphicx}
 \usepackage{booktabs,tabularx,array}
 \usepackage{amsmath}
 \usepackage{csquotes}
-\usepackage[backend=biber,style=authoryear,sorting=nyt,maxcitenames=2]{biblatex}
-\addbibresource{references.bib}
+\usepackage[numbers,sort&compress]{natbib}
+\let\parencite\citep
+\let\textcite\citet
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 \title{Interpretable Classification of Gallstone Status from Clinical and Bioimpedance Data: An Internal Validation Study}
-\author{Duong Nguyen\\University of Auckland}
+\author{\IEEEauthorblockN{Duong Nguyen}\IEEEauthorblockA{University of Auckland}}
 \date{}
 \begin{document}
 \maketitle
 \begin{abstract}
 \input{abstract}
 \end{abstract}
-\noindent\textbf{Keywords:} gallstone classification; clinical tabular data; logistic regression; feature selection; internal validation.
+\begin{IEEEkeywords}
+Gallstone classification, clinical tabular data, logistic regression, feature selection, internal validation.
+\end{IEEEkeywords}
 
 \section{Introduction}\label{sec:introduction}
 \input{introduction}
@@ -39,9 +41,11 @@
 \input{conclusion}
 
 \section*{Data and Code Availability}
-The data originate from the UCI Gallstone dataset \parencite{uci2025gallstone}. The accompanying manuscript directory contains the Python workflow, notebooks, and saved experimental outputs. No public code archive is specified in this manuscript.
+The data originate from the UCI Gallstone dataset \parencite{uci2025gallstone}. The manuscript source, Python workflow, notebooks, and saved experimental outputs are available at \url{https://github.com/QuyDuong106/INFOSYS722_Experimental}. Completed nested Optuna evidence is stored separately for each model family under \texttt{results/optuna\_MODEL/}; configurations, outer-fold predictions, and trial histories support reproduction of the reported metrics.
+
 % \section*{Use of Artificial Intelligence}
 % Generative artificial intelligence tools were used to assist language editing, LaTeX formatting, and manuscript organisation and restructuring.
 
-\printbibliography[title={References}]
+\bibliographystyle{IEEEtranN}
+\bibliography{references}
 \end{document}

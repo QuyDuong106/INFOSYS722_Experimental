@@ -1,0 +1,21 @@
+Although SPSS Modeler provides a structured visual environment that aligns well with many CRISP-DM activities, several practical limitations were encountered during this project. In particular, not every CRISP-DM phase can be represented directly as a modelling node. Activities such as business understanding, interpretation of clinical requirements, and deployment planning still require substantial documentation and reasoning outside the
+SPSS stream.
+
+Model refinement was also relatively manual. Although SPSS provides automated modelling facilities for comparing multiple algorithms, detailed hyperparameter tuning often requires individual model nodes to be configured,
+executed, and compared repeatedly. This makes systematic tuning less flexible than programmatic frameworks where parameter searches, cross-validation, and experiment tracking can be automated more easily.
+
+The range of algorithms and transformations available also depends on the
+installed SPSS Modeler version and extensions. Some newer machine-learning methods and specialised preprocessing techniques are less readily available
+than in Python or R ecosystems. Similarly, custom feature engineering and complex pipeline logic can become difficult to maintain when a stream contains
+many connected nodes.
+
+Another challenge concerns reproducibility and workflow management. The visual stream is useful for demonstrating the sequence of CRISP-DM activities, but changes to parameters and intermediate nodes must be carefully documented to
+ensure that modelling iterations can be reproduced. For this reason, key settings, transformations, partitions, selected variables, and evaluation
+results were explicitly recorded in the report.
+
+Finally, deployment in this iteration is limited to demonstrating a model-ready SPSS workflow rather than implementing a production clinical
+application. A real deployment would additionally require automated data ingestion, monitoring, model versioning, security controls, and integration with healthcare information systems.
+
+Despite these limitations, SPSS Modeler was appropriate for this iteration because its visual workflow clearly demonstrates the relationship between data understanding, preparation, transformation, modelling, and evaluation.
+The limitations mainly affect scalability, automation, and production deployment rather than the ability to conduct the current proof-of-concept
+classification analysis.

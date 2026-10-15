@@ -24,3 +24,17 @@ results/runs/
 results/lopo_optuna/
 results/optuna_*/
 results/xai/
+
+# Reproducible final-paper builds and local caches
+ieee_build/
+xai_build/
+*.lof
+*.lot
+# Preserve observed completed paper evidence; keep new runs ignored.
+!results/optuna_logistic/
+!results/optuna_random_forest/
+!results/optuna_xgboost/
+!results/optuna_lightgbm/
+!results/optuna_stacking/
+
+.venv

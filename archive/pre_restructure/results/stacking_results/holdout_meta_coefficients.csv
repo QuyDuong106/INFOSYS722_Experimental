@@ -1,0 +1,5 @@
+base_model,meta_coefficient
+logistic,0.9899320964338666
+random_forest,-0.2877117089059029
+xgboost,0.5015584086740926
+lightgbm,0.6927668150052839

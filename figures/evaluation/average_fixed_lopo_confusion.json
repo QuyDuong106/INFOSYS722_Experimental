@@ -1,0 +1,19 @@
+{
+  "source": "Experimental/results/lopo/metrics.csv",
+  "families": [
+    "logistic",
+    "random_forest",
+    "xgboost",
+    "lightgbm",
+    "stacking"
+  ],
+  "seed": 42,
+  "mean_counts": {
+    "TN": 118.0,
+    "FP": 40.0,
+    "FN": 29.0,
+    "TP": 132.0
+  },
+  "error_rate": 0.21630094043887146,
+  "interpretation": "Mean across model families, not seeds or independent patients"
+}

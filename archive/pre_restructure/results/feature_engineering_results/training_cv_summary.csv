@@ -1,0 +1,5 @@
+model,best_cv_roc_auc,cv_fold_std,parameters
+Logistic regression,0.831207330219188,0.1069240588253906,"{'model__C': 10.0, 'preprocess__numeric__scaler': RobustScaler(), 'select__percentile': 50}"
+Random forest,0.8219098095580308,0.03174530522767827,"{'model__max_depth': None, 'model__min_samples_leaf': 1, 'select__percentile': 50}"
+LightGBM,0.8120014372978801,0.030063209849519903,"{'model__min_child_samples': 20, 'model__num_leaves': 7, 'select__percentile': 75}"
+XGBoost,0.8099173553719009,0.029698988032701223,"{'model__max_depth': 3, 'model__reg_lambda': 1.0, 'select__percentile': 75}"

@@ -1,0 +1,546 @@
+{
+  "records": 319,
+  "features": 38,
+  "class_counts": {
+    "0": 161,
+    "1": 158
+  },
+  "models": {
+    "logistic": {
+      "holdout_70_15_15": {
+        "best_params": {
+          "select_k": 19,
+          "C": 216.2266160683345
+        },
+        "split_sizes": {
+          "train": 223,
+          "validation": 48,
+          "test": 48
+        },
+        "validation": {
+          "roc_auc": 0.8663194444444445,
+          "average_precision": 0.8955014237496739,
+          "accuracy": 0.75,
+          "balanced_accuracy": 0.75,
+          "precision": 0.8333333333333334,
+          "recall_sensitivity": 0.625,
+          "f1": 0.7142857142857143,
+          "confusion_matrix": [
+            [
+              21,
+              3
+            ],
+            [
+              9,
+              15
+            ]
+          ]
+        },
+        "test": {
+          "roc_auc": 0.8784722222222222,
+          "average_precision": 0.9059220701683937,
+          "accuracy": 0.8125,
+          "balanced_accuracy": 0.8125,
+          "precision": 0.8260869565217391,
+          "recall_sensitivity": 0.7916666666666666,
+          "f1": 0.8085106382978723,
+          "confusion_matrix": [
+            [
+              20,
+              4
+            ],
+            [
+              5,
+              19
+            ]
+          ]
+        },
+        "selected_features": [
+          "numeric__comorbidity",
+          "numeric__hypothyroidism",
+          "numeric__hyperlipidemia",
+          "numeric__bmi",
+          "numeric__tbw",
+          "numeric__ecw",
+          "numeric__icw",
+          "numeric__ecf_tbw",
+          "numeric__protein_pct",
+          "numeric__vfr",
+          "numeric__bm",
+          "numeric__mm",
+          "numeric__vfa",
+          "numeric__tc",
+          "numeric__ast",
+          "numeric__alt",
+          "numeric__alp",
+          "numeric__crp",
+          "numeric__vitamin_d"
+        ]
+      },
+      "leave_one_out": {
+        "best_params": {
+          "select_k": "all",
+          "C": 3.048114615558675
+        },
+        "metrics": {
+          "roc_auc": 0.8692114159918233,
+          "average_precision": 0.8637881832337281,
+          "accuracy": 0.7899686520376176,
+          "balanced_accuracy": 0.7893898891422282,
+          "precision": 0.8273381294964028,
+          "recall_sensitivity": 0.7278481012658228,
+          "f1": 0.7744107744107744,
+          "confusion_matrix": [
+            [
+              137,
+              24
+            ],
+            [
+              43,
+              115
+            ]
+          ]
+        },
+        "selected_features": [
+          "numeric__age",
+          "numeric__gender",
+          "numeric__comorbidity",
+          "numeric__cad",
+          "numeric__hypothyroidism",
+          "numeric__hyperlipidemia",
+          "numeric__dm",
+          "numeric__height",
+          "numeric__weight",
+          "numeric__bmi",
+          "numeric__tbw",
+          "numeric__ecw",
+          "numeric__icw",
+          "numeric__ecf_tbw",
+          "numeric__tbfr_pct",
+          "numeric__lm_pct",
+          "numeric__protein_pct",
+          "numeric__vfr",
+          "numeric__bm",
+          "numeric__mm",
+          "numeric__obesity_pct",
+          "numeric__tfc",
+          "numeric__vfa",
+          "numeric__vma_kg",
+          "numeric__hfa",
+          "numeric__glucose",
+          "numeric__tc",
+          "numeric__ldl",
+          "numeric__hdl",
+          "numeric__triglyceride",
+          "numeric__ast",
+          "numeric__alt",
+          "numeric__alp",
+          "numeric__creatinine",
+          "numeric__gfr",
+          "numeric__crp",
+          "numeric__hgb",
+          "numeric__vitamin_d"
+        ]
+      }
+    },
+    "random_forest": {
+      "holdout_70_15_15": {
+        "best_params": {
+          "select_k": 9,
+          "n_estimators": 550,
+          "max_depth": 17,
+          "min_samples_split": 3,
+          "min_samples_leaf": 6,
+          "max_features": null
+        },
+        "split_sizes": {
+          "train": 223,
+          "validation": 48,
+          "test": 48
+        },
+        "validation": {
+          "roc_auc": 0.8506944444444444,
+          "average_precision": 0.8852533980941081,
+          "accuracy": 0.7291666666666666,
+          "balanced_accuracy": 0.7291666666666667,
+          "precision": 0.7894736842105263,
+          "recall_sensitivity": 0.625,
+          "f1": 0.6976744186046512,
+          "confusion_matrix": [
+            [
+              20,
+              4
+            ],
+            [
+              9,
+              15
+            ]
+          ]
+        },
+        "test": {
+          "roc_auc": 0.8628472222222223,
+          "average_precision": 0.8609637086588897,
+          "accuracy": 0.75,
+          "balanced_accuracy": 0.75,
+          "precision": 0.7142857142857143,
+          "recall_sensitivity": 0.8333333333333334,
+          "f1": 0.7692307692307693,
+          "confusion_matrix": [
+            [
+              16,
+              8
+            ],
+            [
+              4,
+              20
+            ]
+          ]
+        },
+        "selected_features": [
+          "numeric__ecw",
+          "numeric__icw",
+          "numeric__ecf_tbw",
+          "numeric__protein_pct",
+          "numeric__vfr",
+          "numeric__tc",
+          "numeric__alp",
+          "numeric__crp",
+          "numeric__vitamin_d"
+        ]
+      },
+      "leave_one_out": {
+        "best_params": {
+          "select_k": 19,
+          "n_estimators": 700,
+          "max_depth": 13,
+          "min_samples_split": 10,
+          "min_samples_leaf": 1,
+          "max_features": "sqrt"
+        },
+        "metrics": {
+          "roc_auc": 0.849044736221401,
+          "average_precision": 0.8570936569093259,
+          "accuracy": 0.786833855799373,
+          "balanced_accuracy": 0.786815001179338,
+          "precision": 0.7848101265822784,
+          "recall_sensitivity": 0.7848101265822784,
+          "f1": 0.7848101265822784,
+          "confusion_matrix": [
+            [
+              127,
+              34
+            ],
+            [
+              34,
+              124
+            ]
+          ]
+        },
+        "selected_features": [
+          "numeric__hypothyroidism",
+          "numeric__hyperlipidemia",
+          "numeric__ecw",
+          "numeric__icw",
+          "numeric__ecf_tbw",
+          "numeric__protein_pct",
+          "numeric__vfr",
+          "numeric__bm",
+          "numeric__obesity_pct",
+          "numeric__hfa",
+          "numeric__tc",
+          "numeric__hdl",
+          "numeric__triglyceride",
+          "numeric__ast",
+          "numeric__alt",
+          "numeric__alp",
+          "numeric__crp",
+          "numeric__hgb",
+          "numeric__vitamin_d"
+        ]
+      }
+    },
+    "extra_trees": {
+      "holdout_70_15_15": {
+        "best_params": {
+          "select_k": 28,
+          "n_estimators": 500,
+          "max_depth": 20,
+          "min_samples_split": 14,
+          "min_samples_leaf": 1,
+          "max_features": null
+        },
+        "split_sizes": {
+          "train": 223,
+          "validation": 48,
+          "test": 48
+        },
+        "validation": {
+          "roc_auc": 0.8645833333333334,
+          "average_precision": 0.8913662050929358,
+          "accuracy": 0.75,
+          "balanced_accuracy": 0.75,
+          "precision": 0.7307692307692307,
+          "recall_sensitivity": 0.7916666666666666,
+          "f1": 0.76,
+          "confusion_matrix": [
+            [
+              17,
+              7
+            ],
+            [
+              5,
+              19
+            ]
+          ]
+        },
+        "test": {
+          "roc_auc": 0.9409722222222223,
+          "average_precision": 0.9468282088449965,
+          "accuracy": 0.7916666666666666,
+          "balanced_accuracy": 0.7916666666666667,
+          "precision": 0.75,
+          "recall_sensitivity": 0.875,
+          "f1": 0.8076923076923077,
+          "confusion_matrix": [
+            [
+              17,
+              7
+            ],
+            [
+              3,
+              21
+            ]
+          ]
+        },
+        "selected_features": [
+          "numeric__age",
+          "numeric__comorbidity",
+          "numeric__cad",
+          "numeric__hypothyroidism",
+          "numeric__hyperlipidemia",
+          "numeric__dm",
+          "numeric__bmi",
+          "numeric__tbw",
+          "numeric__ecw",
+          "numeric__icw",
+          "numeric__ecf_tbw",
+          "numeric__lm_pct",
+          "numeric__protein_pct",
+          "numeric__vfr",
+          "numeric__bm",
+          "numeric__mm",
+          "numeric__obesity_pct",
+          "numeric__tfc",
+          "numeric__vfa",
+          "numeric__hfa",
+          "numeric__tc",
+          "numeric__triglyceride",
+          "numeric__ast",
+          "numeric__alt",
+          "numeric__alp",
+          "numeric__crp",
+          "numeric__hgb",
+          "numeric__vitamin_d"
+        ]
+      },
+      "leave_one_out": {
+        "best_params": {
+          "select_k": "all",
+          "n_estimators": 300,
+          "max_depth": 12,
+          "min_samples_split": 13,
+          "min_samples_leaf": 2,
+          "max_features": null
+        },
+        "metrics": {
+          "roc_auc": 0.8622533218020284,
+          "average_precision": 0.8721810650443302,
+          "accuracy": 0.780564263322884,
+          "balanced_accuracy": 0.7806627879550279,
+          "precision": 0.7716049382716049,
+          "recall_sensitivity": 0.7911392405063291,
+          "f1": 0.78125,
+          "confusion_matrix": [
+            [
+              124,
+              37
+            ],
+            [
+              33,
+              125
+            ]
+          ]
+        },
+        "selected_features": [
+          "numeric__age",
+          "numeric__gender",
+          "numeric__comorbidity",
+          "numeric__cad",
+          "numeric__hypothyroidism",
+          "numeric__hyperlipidemia",
+          "numeric__dm",
+          "numeric__height",
+          "numeric__weight",
+          "numeric__bmi",
+          "numeric__tbw",
+          "numeric__ecw",
+          "numeric__icw",
+          "numeric__ecf_tbw",
+          "numeric__tbfr_pct",
+          "numeric__lm_pct",
+          "numeric__protein_pct",
+          "numeric__vfr",
+          "numeric__bm",
+          "numeric__mm",
+          "numeric__obesity_pct",
+          "numeric__tfc",
+          "numeric__vfa",
+          "numeric__vma_kg",
+          "numeric__hfa",
+          "numeric__glucose",
+          "numeric__tc",
+          "numeric__ldl",
+          "numeric__hdl",
+          "numeric__triglyceride",
+          "numeric__ast",
+          "numeric__alt",
+          "numeric__alp",
+          "numeric__creatinine",
+          "numeric__gfr",
+          "numeric__crp",
+          "numeric__hgb",
+          "numeric__vitamin_d"
+        ]
+      }
+    },
+    "svm": {
+      "holdout_70_15_15": {
+        "best_params": {
+          "select_k": 9,
+          "C": 5.199556018650188,
+          "gamma": 0.088232481326733
+        },
+        "split_sizes": {
+          "train": 223,
+          "validation": 48,
+          "test": 48
+        },
+        "validation": {
+          "roc_auc": 0.810763888888889,
+          "average_precision": 0.8320311824337154,
+          "accuracy": 0.7083333333333334,
+          "balanced_accuracy": 0.7083333333333333,
+          "precision": 0.7272727272727273,
+          "recall_sensitivity": 0.6666666666666666,
+          "f1": 0.6956521739130435,
+          "confusion_matrix": [
+            [
+              18,
+              6
+            ],
+            [
+              8,
+              16
+            ]
+          ]
+        },
+        "test": {
+          "roc_auc": 0.8715277777777778,
+          "average_precision": 0.882579702236603,
+          "accuracy": 0.75,
+          "balanced_accuracy": 0.75,
+          "precision": 0.7142857142857143,
+          "recall_sensitivity": 0.8333333333333334,
+          "f1": 0.7692307692307693,
+          "confusion_matrix": [
+            [
+              16,
+              8
+            ],
+            [
+              4,
+              20
+            ]
+          ]
+        },
+        "selected_features": [
+          "numeric__ecw",
+          "numeric__icw",
+          "numeric__ecf_tbw",
+          "numeric__protein_pct",
+          "numeric__vfr",
+          "numeric__tc",
+          "numeric__alp",
+          "numeric__crp",
+          "numeric__vitamin_d"
+        ]
+      },
+      "leave_one_out": {
+        "best_params": {
+          "select_k": "all",
+          "C": 229.4548449419662,
+          "gamma": 0.0006018511238837921
+        },
+        "metrics": {
+          "roc_auc": 0.8726708074534163,
+          "average_precision": 0.8630583196679753,
+          "accuracy": 0.786833855799373,
+          "balanced_accuracy": 0.7862253321802029,
+          "precision": 0.8260869565217391,
+          "recall_sensitivity": 0.7215189873417721,
+          "f1": 0.7702702702702703,
+          "confusion_matrix": [
+            [
+              137,
+              24
+            ],
+            [
+              44,
+              114
+            ]
+          ]
+        },
+        "selected_features": [
+          "numeric__age",
+          "numeric__gender",
+          "numeric__comorbidity",
+          "numeric__cad",
+          "numeric__hypothyroidism",
+          "numeric__hyperlipidemia",
+          "numeric__dm",
+          "numeric__height",
+          "numeric__weight",
+          "numeric__bmi",
+          "numeric__tbw",
+          "numeric__ecw",
+          "numeric__icw",
+          "numeric__ecf_tbw",
+          "numeric__tbfr_pct",
+          "numeric__lm_pct",
+          "numeric__protein_pct",
+          "numeric__vfr",
+          "numeric__bm",
+          "numeric__mm",
+          "numeric__obesity_pct",
+          "numeric__tfc",
+          "numeric__vfa",
+          "numeric__vma_kg",
+          "numeric__hfa",
+          "numeric__glucose",
+          "numeric__tc",
+          "numeric__ldl",
+          "numeric__hdl",
+          "numeric__triglyceride",
+          "numeric__ast",
+          "numeric__alt",
+          "numeric__alp",
+          "numeric__creatinine",
+          "numeric__gfr",
+          "numeric__crp",
+          "numeric__hgb",
+          "numeric__vitamin_d"
+        ]
+      }
+    }
+  }
+}

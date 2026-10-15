@@ -1,0 +1,66 @@
+{
+  "seeds": [
+    42,
+    7,
+    21,
+    84,
+    123
+  ],
+  "models": [
+    "logistic",
+    "random_forest",
+    "xgboost",
+    "lightgbm",
+    "stacking"
+  ],
+  "selectors": [
+    "rfe",
+    "cart"
+  ],
+  "top_k_source_features": 20,
+  "split": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "threshold": 0.5,
+  "variance_ddof": 1,
+  "source_labels": {
+    "0": "present",
+    "1": "absent"
+  },
+  "model_labels": {
+    "0": "absent",
+    "1": "present"
+  },
+  "selection_rule": "validation ROC-AUC descending, accuracy descending, FNR ascending, selector/model name",
+  "winners": {
+    "42": {
+      "selection": "cart",
+      "model": "logistic"
+    },
+    "7": {
+      "selection": "rfe",
+      "model": "logistic"
+    },
+    "21": {
+      "selection": "cart",
+      "model": "logistic"
+    },
+    "84": {
+      "selection": "rfe",
+      "model": "logistic"
+    },
+    "123": {
+      "selection": "cart",
+      "model": "logistic"
+    }
+  },
+  "versions": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.1",
+    "sklearn": "1.9.0",
+    "xgboost": "3.0.4",
+    "lightgbm": "4.7.0"
+  }
+}

@@ -1,0 +1,163 @@
+All SPSS Modeler streams, datasets, intermediate outputs, and generated
+models used in this project are provided in the accompanying
+\texttt{SPSS\_modeler} directory. The main SPSS Modeler project file is:
+
+\begin{verbatim}
+SPSS_modeler/dugn944.cpj
+\end{verbatim}
+
+The project was developed using FlexIT and macOS. Some SPSS Modeler source
+nodes retain absolute file paths from the development environments. Therefore,
+if a file cannot be located when the project is opened on another computer,
+the source node should be redirected to the corresponding file in the
+\texttt{SPSS\_modeler} directory. No external dataset is required.
+
+\textbf{Important:} SPSS Modeler may retain absolute paths from the original
+development computer. If a source-node path is unavailable, please select the
+file with the same filename from the submitted \texttt{SPSS\_modeler}
+directory. All required source data are included locally.
+
+\subsection{Required Data Files}
+
+The original dataset is retained unchanged as:
+
+\begin{verbatim}
+SPSS_modeler/dataset_gallstone.xlsx
+\end{verbatim}
+
+For the data-integration stage, the original dataset was divided into two
+logically separate sources:
+
+\begin{verbatim}
+SPSS_modeler/gallstone_demographic_clinical.csv
+SPSS_modeler/gallstone_biological_body_composition.csv
+\end{verbatim}
+
+Both integration files contain 319 participant records and share the same
+\texttt{record\_id} values. They are merged using \texttt{record\_id} in the
+Data Cleaning/Data Processing workflow.
+
+If SPSS Modeler reports that a source file cannot be found, open the
+corresponding source node, choose \textit{Browse}, and select the appropriate
+file from the local \texttt{SPSS\_modeler} folder rather than using the
+absolute path stored on the original development machine.
+
+\subsection{SPSS Modeler Streams}
+
+The main streams used in the project are:
+
+\begin{verbatim}
+Business_Understanding.str
+EDA_stream.str
+Data_Cleaning.str
+Data_Processing.str
+Feature_Transformation.str
+Feature_Importance.str
+Modeling.str
+Auto_Modeling.str
+\end{verbatim}
+
+Their intended execution order is approximately:
+
+\begin{center}
+\begin{tabular}{c}
+Business Understanding $\longrightarrow$ EDA
+$\longrightarrow$ Data Cleaning and Integration \\
+$\longrightarrow$ Transformation $\longrightarrow$ Feature Selection \\
+$\longrightarrow$ Modelling $\longrightarrow$ Auto Modelling
+\end{tabular}
+\end{center}
+
+The streams ending in \texttt{.str-} are backup versions automatically
+created during development and are not required for normal execution.
+
+\subsection{Generated and Intermediate Outputs}
+
+The directory also contains generated datasets, models, and analytical
+outputs used to support the report. Important files include:
+
+\begin{verbatim}
+Output_Feature_Selection.tab
+Transformed_Data.tab
+GeneratedModels.gen
+new.gen
+Correlation matrix.cou
+Data Audit of [39 fields].cou
+t-SNE.cou
+Transformed_Data (43 fields, 319 records).cou
+\end{verbatim}
+
+Files with the \texttt{.cou} extension contain SPSS Modeler output objects,
+while \texttt{.gen} files contain generated model objects. These files are
+included so that the modelling outputs can be inspected without necessarily
+rebuilding every model from the beginning.
+
+\subsection{Reproducing the Workflow}
+
+To reproduce the analysis:
+
+\begin{enumerate}
+    \item Open \texttt{dugn944.cpj} in SPSS Modeler.
+    \item Confirm that the source nodes point to files inside the submitted
+    \texttt{SPSS\_modeler} directory.
+    \item If an absolute-path error occurs, manually reselect
+    \texttt{dataset\_gallstone.xlsx} or the appropriate integration CSV file
+    from this directory.
+    \item Run the relevant stream from left to right.
+    \item For the integration workflow, verify that
+    \texttt{record\_id} is used as the merge key.
+    \item Confirm that the integrated dataset contains 319 records and that
+    no additional missing values or duplicate records have been introduced.
+    \item Run the feature-transformation and feature-selection streams before
+    executing the refined modelling workflows where required.
+    \item Use the existing generated model and output files to compare the
+    reproduced results with those reported in the main document.
+\end{enumerate}
+
+The modelling dataset is partitioned into training, validation, and testing
+subsets within SPSS Modeler. Therefore, the submitted files should be used
+with the existing partition settings and random seed where specified to
+maintain consistency with the results reported in this project.
+
+\subsection{Recommended Submission Directory}
+
+The submitted project is organised as follows:
+
+\begin{verbatim}
+submission_directory/
+|
+|-- SPSS_modeler/
+|   |
+|   |-- dugn944.cpj
+|
+|   |-- dataset_gallstone.xlsx
+|   |-- gallstone_demographic_clinical.csv
+|   |-- gallstone_biological_body_composition.csv
+|
+|   |-- Business_Understanding.str
+|   |-- EDA_stream.str
+|   |-- Data_Cleaning.str
+|   |-- Data_Processing.str
+|   |-- Feature_Transformation.str
+|   |-- Feature_Importance.str
+|   |-- Modeling.str
+|   |-- Auto_Modeling.str
+|
+|   |-- Output_Feature_Selection.tab
+|   |-- Transformed_Data.tab
+|   |-- GeneratedModels.gen
+|   |-- new.gen
+|
+|   |-- *.cou
+|   `-- split_gallstone_dataset.py
+|
+|-- Report/
+|   |-- main.tex
+|   |-- references.bib
+|   |-- media/
+|   `-- other report source files
+\end{verbatim}
+
+Keeping all project resources under a single parent directory reduces the
+risk of missing dependencies and allows the marker to redirect any unresolved
+absolute paths to the equivalent submitted files.
