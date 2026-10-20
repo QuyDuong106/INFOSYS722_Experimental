@@ -11,7 +11,7 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
-\title{Interpretable Classification of Gallstone Status from Clinical and Bioimpedance Data: An Internal Validation Study}
+\title{Explainable Gallstone Status Prediction from Clinical and Bioimpedance Data: A Nested Model Selection and Patient-Level Testing Framework}
 \author{\IEEEauthorblockN{Duong Nguyen}\IEEEauthorblockA{University of Auckland}}
 \date{}
 \begin{document}
@@ -20,7 +20,9 @@
 \input{abstract}
 \end{abstract}
 \begin{IEEEkeywords}
-Gallstone classification, clinical tabular data, logistic regression, feature selection, internal validation.
+Gallstone classification, explainable artificial intelligence,
+ensemble learning, feature selection, clinical prediction modeling,
+leave-one-patient-out cross-validation, biomedical machine learning.
 \end{IEEEkeywords}
 
 \section{Introduction}\label{sec:introduction}
@@ -41,7 +43,7 @@ Gallstone classification, clinical tabular data, logistic regression, feature se
 \input{conclusion}
 
 \section*{Data and Code Availability}
-The data originate from the UCI Gallstone dataset \parencite{uci2025gallstone}. The manuscript source, Python workflow, notebooks, and saved experimental outputs are available at \url{https://github.com/QuyDuong106/INFOSYS722_Experimental}. Completed nested Optuna evidence is stored separately for each model family under \texttt{results/optuna\_MODEL/}; configurations, outer-fold predictions, and trial histories support reproduction of the reported metrics.
+The data originate from the UCI Gallstone dataset \parencite{uci2025gallstone}. The manuscript source, Python workflow, notebooks, and saved experimental outputs are available at \url{https://github.com/QuyDuong106/INFOSYS722_Experimental}. Completed nested Optuna evidence is stored separately for each model family under \texttt{results/optuna\_MODEL/}; configurations, outer-fold predictions, and trial histories support reproduction of the reported metrics. The completed updated stacking run and its per-patient validation metrics are retained in \path{results/stacking_v3}.
 
 % \section*{Use of Artificial Intelligence}
 % Generative artificial intelligence tools were used to assist language editing, LaTeX formatting, and manuscript organisation and restructuring.

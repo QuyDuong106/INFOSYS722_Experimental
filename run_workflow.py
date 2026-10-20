@@ -25,10 +25,11 @@ def main():
     parser.add_argument('--kernel', default='gallstone-iteration3')
     parser.add_argument('--list', action='store_true', help='Print stages without executing')
     parser.add_argument('--trials', type=int, default=20, help='Optuna trials per outer fold/model')
-    parser.add_argument('--inner-folds', type=int, default=3)
+    parser.add_argument('--inner-folds', type=int, choices=(3,), default=3)
     parser.add_argument('--seed', type=int, default=42)
     parser.add_argument('--models', nargs='+', choices=('logistic', 'random_forest', 'xgboost', 'lightgbm', 'stacking', 'dummy_prior'))
     parser.add_argument('--top-k', type=int, default=20)
+    parser.add_argument('--k-values', type=int, nargs='+', help='Feature counts searched inside training CV')
     parser.add_argument('--output-dir', type=Path, help='Directory for nested Leave One Patient Out evidence')
     parser.add_argument('--max-folds', type=int, help='Partial Leave One Patient Out smoke run')
     parser.add_argument('--refit-final', action='store_true')
@@ -61,6 +62,8 @@ def main():
             command = [sys.executable, path, '--trials', str(args.trials),
                        '--inner-folds', str(args.inner_folds), '--seed', str(args.seed),
                        '--top-k', str(args.top_k)]
+            if args.k_values:
+                command += ['--k-values', *map(str, args.k_values)]
             if args.models:
                 command += ['--models', *args.models]
             if args.output_dir:

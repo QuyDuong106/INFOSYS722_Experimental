@@ -25,30 +25,42 @@ The training-prior dummy's pooled AUC of 0.000 is a leave-one-out artefact: excl
 The single LOPO run compares fixed pipelines using the same excluded records; it does not estimate between-seed variability or the performance of a nested model-selection procedure.
 
 \subsection{Optuna-Tuned Leave One Patient Out Benchmarks}
-All five predictive families completed 319 outer folds with 20 Optuna trials and three stratified inner folds per outer training set. The source-data signature, feature count, seed, threshold, and dependency versions were identical across tuned runs. Table~\ref{tab:tuned-lopo-results} reports pooled held-out performance; hyperparameters were selected separately within each outer fold.
+All five predictive families completed 319 outer folds with 20 Optuna trials and three stratified inner folds per outer training set. The source-data signature, feature count, seed, threshold, and dependency versions were identical across tuned runs. The first five rows of Table~\ref{tab:tuned-lopo-results} are these historical fixed-RFE20 runs; the final row is updated stacking with a searched feature count. All scores evaluate pooled held-out predictions, not inner validation scores.
 
 \begin{table*}[t]
-\centering
-\footnotesize
+\centering\footnotesize
 \setlength{\tabcolsep}{4pt}
-\caption{Optuna-tuned Leave One Patient Out evaluation: 319 held-out predictions per family, RFE--CART with 20 source predictors, and threshold 0.5. Bold marks the best predictive-family value in each rate column. FN: number of missed gallstone cases out of 161.}
+\caption{Completed Optuna LOPO test results: 319 held-out predictions per configuration, seed 42, twenty trials, three inner folds and threshold 0.5. The first five rows use fixed RFE20; updated stacking searches k in 10/20/30/38 and tunes XGBoost/LightGBM/ridge bases with a fixed logistic meta learner. Bold marks the best observed value (lower for FNR/FN). Different search designs limit causal comparisons.}
 \label{tab:tuned-lopo-results}
-\begin{tabular}{@{}lrrrrrrr@{}}
+\begin{tabular}{@{}lrrrrrrrr@{}}
 \toprule
-Model & Accuracy & ROC--AUC & Sensitivity & Specificity & F1 & FNR & FN \\
+Model/configuration & Accuracy & ROC--AUC & Precision & Sensitivity & Specificity & F1 & FNR & FN \\
 \midrule
-Logistic regression & \textbf{0.787} & \textbf{0.868} & \textbf{0.826} & 0.747 & \textbf{0.796} & \textbf{0.174} & 28 \\
-Random forest & 0.774 & 0.842 & 0.807 & 0.741 & 0.783 & 0.193 & 31 \\
-XGBoost & 0.784 & 0.851 & \textbf{0.826} & 0.741 & 0.794 & \textbf{0.174} & 28 \\
-LightGBM & \textbf{0.787} & 0.840 & 0.814 & \textbf{0.759} & 0.794 & 0.186 & 30 \\
-Stacking & 0.784 & 0.862 & 0.807 & \textbf{0.759} & 0.790 & 0.193 & 31 \\
+Logistic regression & 0.7868 & 0.8680 & 0.7688 & 0.8261 & 0.7468 & 0.7964 & 0.1739 & 28 \\
+Random forest & 0.7743 & 0.8421 & 0.7602 & 0.8075 & 0.7405 & 0.7831 & 0.1925 & 31 \\
+XGBoost & 0.7837 & 0.8509 & 0.7644 & 0.8261 & 0.7405 & 0.7940 & 0.1739 & 28 \\
+LightGBM & 0.7868 & 0.8395 & 0.7751 & 0.8137 & 0.7595 & 0.7939 & 0.1863 & 30 \\
+Stacking (historical, meta-tuned) & 0.7837 & 0.8617 & 0.7738 & 0.8075 & 0.7595 & 0.7903 & 0.1925 & 31 \\
+\midrule
+Stacking (updated, base-tuned) & \textbf{0.8056} & \textbf{0.8762} & \textbf{0.7895} & \textbf{0.8385} & \textbf{0.7722} & \textbf{0.8133} & \textbf{0.1615} & \textbf{26} \\
 \bottomrule
 \end{tabular}
 \end{table*}
 
-Tuned logistic regression retained the highest AUC (0.868) and F1 (0.796), with accuracy 0.787 and sensitivity 0.826. It detected 133 of 161 cases and correctly classified 118 of 158 controls. XGBoost matched its sensitivity and false-negative count (28), but had lower AUC (0.851) and one additional false positive (41 versus 40). LightGBM matched the highest accuracy (0.787), while LightGBM and stacking shared the highest specificity (0.759). Random forest achieved AUC 0.842 and sensitivity 0.807. Stacking did not exceed logistic regression in discrimination or sensitivity; only its logistic meta-learner was tuned, with fixed base-model settings.
+Within the historical fixed-RFE20 comparison, tuned logistic regression retained the highest AUC (0.868) and F1 (0.796), with accuracy 0.787 and sensitivity 0.826. It detected 133 of 161 cases and correctly classified 118 of 158 controls. XGBoost matched its sensitivity and false-negative count (28), but had lower AUC (0.851) and one additional false positive (41 versus 40). LightGBM matched the highest accuracy (0.787), while LightGBM and stacking shared the highest specificity (0.759). Random forest achieved AUC 0.842 and sensitivity 0.807. Stacking did not exceed logistic regression in discrimination or sensitivity; only its logistic meta-learner was tuned, with fixed base-model settings.
 
-\subsection{Changes Relative to Fixed Configurations}
+\subsection{Updated Base-Tuned Stacking with Joint Feature Selection}
+The completed search-version-3 stacking run evaluated all 319 outer exclusions using seed 42, twenty Optuna trials per exclusion and three stratified inner validation folds. Unlike the historical meta-only search, this run jointly tuned XGBoost, LightGBM and ridge base learners and the RFE feature count; the standardised logistic meta-learner remained fixed at $C=1$. Table~\ref{tab:tuned-lopo-results} reports metrics recomputed from the saved outer predictions, not averages of inner validation scores.
+
+
+
+The updated stack correctly classified 257 of 319 records: TN=122, FP=36, FN=26 and TP=135. Its AUC increased descriptively by 0.0145 and five fewer positive records were missed relative to the historical tuned stack. Across completed tuned experiments, this configuration has the highest observed AUC, accuracy, sensitivity, specificity and F1. These rankings are descriptive: the standalone candidates have not been rerun with the new feature-count search, and no significance or independent replication is established.
+
+Optuna selected 10 features in one outer fold, 20 in 45 folds, 30 in 34 folds and all 38 in 239 folds. This favours the full input set in most exclusions and does not support a claim that a reduced twenty-field subset is optimal for the updated stack. The arithmetic mean selected-trial inner-validation AUC was 0.8747 across exclusions; it is a tuning diagnostic, not the outer test AUC, and its heavily overlapping validation sets are not independent replications.
+
+The source evidence is \path{results/stacking_v3}: configuration, 319 prediction rows, 319 outer checkpoints, 6,380 completed Optuna trials and \path{CV_Metrics/stacking.csv}. The latter retains the selected trial's three-fold mean, sample standard deviation and individual-fold accuracy, AUC, precision, recall, specificity and sensitivity, plus selected feature count. Recall and sensitivity denote the same positive-class quantity. The new stack changes base composition, tuning scope, feature-count search and sampler-seed scheduling together; the observed improvement cannot be attributed to one change alone. SHAP/LIME figures below still explain the historical tuned logistic models and have not been regenerated for the new stack.
+
+\subsection{Historical Changes Relative to Fixed Configurations}
 XGBoost showed the largest positive change relative to its historical fixed benchmark: AUC increased from 0.835 to 0.851, accuracy from 0.762 to 0.784, and sensitivity from 0.807 to 0.826; false negatives decreased from 31 to 28. Logistic regression's AUC decreased from 0.874 to 0.868, although accuracy increased slightly and one fewer positive record was missed. Random forest's AUC decreased from 0.857 to 0.842, with five additional false negatives (26 to 31). LightGBM's accuracy was unchanged, but AUC decreased from 0.851 to 0.840 and false negatives increased from 27 to 30. Stacking's AUC decreased from 0.865 to 0.862; one fewer false negative was offset by two additional false positives.
 
 These differences are descriptive rather than evidence that tuning alone caused the changes. The historical fixed run used scikit-learn 1.7.1, whereas the tuned runs used 1.9.1; NumPy and pandas versions also differed. Although the cohort and outer record exclusions were shared, a controlled estimate of tuning's effect requires refitting the fixed configurations in the tuned environment. No significance test or confidence interval was calculated. Optimising inner-fold AUC did not consistently improve outer discrimination or classification at threshold 0.5, and the search budget does not establish globally optimal parameters.

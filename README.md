@@ -22,12 +22,16 @@ assumes one record per person; repeated patient records require grouped splits.
 
 ## Nested Optuna evaluation
 
+Continuous predictors use `PowerTransformer(method="yeo-johnson", standardize=True)`. Optuna jointly tunes RFE feature count via `--k-values 10 20 30 38`; each candidate selector is fitted within training CV. Stacking shares k across its three base pipelines and keeps its meta learner fixed.
+
+**Updated search version 3:** use a fresh output directory. See [LOPO_TUNING.md](LOPO_TUNING.md) for base-learner search settings, per-patient validation CSVs and majority voting. The manuscript retains historical search-version-1 comparisons and now separately reports the completed version-3 stacking experiment.
+
 ```bash
 # All five predictive families and the untuned dummy benchmark.
-python run_workflow.py --from-stage lopo --to-stage lopo --trials 20
+python run_workflow.py --from-stage lopo --to-stage lopo --trials 20 --output-dir results/lopo_v3
 
 # One family; choose its own output directory.
-python run_workflow.py --from-stage lopo --to-stage lopo --models logistic --trials 20 --output-dir results/optuna_logistic
+python run_workflow.py --from-stage lopo --to-stage lopo --models logistic --trials 20 --output-dir results/new_optuna_logistic_v2
 ```
 
 Available model names: `logistic`, `random_forest`, `xgboost`, `lightgbm`,
@@ -36,11 +40,10 @@ output directory to run it separately.
 
 For each of 319 outer folds, exclude one record and tune using only the remaining
 318. Optuna maximises mean ROC–AUC across three stratified inner folds. Imputation,
-RFE–CART selection of 20 source features, transformations, and model fitting are
+RFE–CART with Optuna-tuned source-feature count (default 10/20/30/38), transformations, and model fitting are
 repeated within each inner training fold. Refit the best pipeline on the 318
 records and predict the excluded record. Pool one held-out prediction per record
-to calculate metrics at threshold 0.5. Stacking tunes only its logistic
-meta-learner C; its base settings remain fixed. The dummy is not tuned.
+to calculate metrics at threshold 0.5. New stacking runs jointly tune XGBoost, LightGBM and ridge base learners. The existing standardized logistic meta-model stays fixed at C=1. Ridge uses decision scores; the boosting learners use probabilities. The dummy is not tuned. Three inner folds are required for every candidate.
 
 ```bash
 # Short smoke run, not a complete evaluation.
@@ -56,7 +59,7 @@ require a new output directory. Trial budgets apply per outer fold/model, so
 full nested evaluation, especially stacking, can take substantial time.
 
 Default outputs: `results/lopo_optuna/metrics.csv`, `predictions.csv`,
-`fold_best_parameters.csv`, trial CSVs, configuration and fold checkpoints.
+`fold_best_parameters.csv`, trial CSVs, configuration and fold checkpoints. Each run also writes `CV_Metrics/<model>.csv`, containing selected-trial validation metrics for each excluded patient; these are separate from the final held-out metrics.
 Partial runs do not publish complete evaluation metrics. Optional inference
 models are stored in `final_models/` beneath the selected output directory and
 never generate outer scores. Parameters are chosen separately for each outer
@@ -115,6 +118,8 @@ new nested Optuna outputs.
 - `optuna_lopo.py`: nested tuning, evaluation, checkpoints and optional inference refits.
 - `utils.py`, `modeling.py`: shared data and model pipelines.
 - `xai_utils.py`: shared SHAP/LIME notebook setup.
+- `cv_reporting.py`: selected-trial, per-patient inner-validation metrics.
+- `majority_voting.py`: aligned hard voting from complete saved LOPO predictions.
 - `notebooks/`, `tests/`, `scripts/`: analysis, invariant tests and historical comparison code.
 - `main.tex` and section files: revised manuscript; references in `references.bib`.
 
@@ -126,3 +131,9 @@ are ignored by Git. Only load trusted model pickle files. Completed per-family p
 `INFOSYS722_Experimental` is the single main research-paper repository. On 16 October 2026 the newer IEEE manuscript, XAI figures and observed LOPO evidence from `INFOSYS722/Research_Paper` were consolidated here. Repository-only XAI notebooks and dependencies were retained. The old Research Paper path is a local compatibility link to this folder. The separate `INFOSYS722/Experimental` environment remains available and was not reinstalled or removed.
 
 See [the consolidation manifest](docs/consolidation_manifest.json) for source hashes and copied paths. Historical revisions are under `archive/` and `report_archive/`; they are not alternative final manuscripts. Temporary LaTeX builds and caches are excluded.
+
+## Latest completed stacking result
+
+The version-3 run in [`results/stacking_v3`](results/stacking_v3) completed all 319 outer exclusions, 20 trials and three inner folds per exclusion (seed 42). Verified pooled metrics are AUC **0.8762**, accuracy **0.8056**, precision **0.7895**, sensitivity **0.8385**, specificity **0.7722** and F1 **0.8133**; confusion counts are TN=122, FP=36, FN=26, TP=135. It tunes XGBoost/LightGBM/ridge bases and RFE k with the logistic meta learner fixed. Selected k counts: 10 in 1 fold, 20 in 45, 30 in 34 and 38 in 239.
+
+The updated paper reports this as a separate extension because the historical standalone models did not search k. Historical XAI figures still explain tuned logistic regression. Per-patient validation metrics are in `results/stacking_v3/CV_Metrics/stacking.csv`; these differ from pooled outer-test results. Historical version-1 execution code is preserved in Git at commit `bc917c0`. The incomplete `results/lopo_v3` attempt is not submitted as completed evidence.

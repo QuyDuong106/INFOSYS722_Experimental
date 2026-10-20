@@ -14,7 +14,7 @@ import numpy as np
 import pandas as pd
 from sklearn.base import clone
 from sklearn.dummy import DummyClassifier
-from sklearn.metrics import roc_auc_score
+from cv_reporting import classification_metrics, write_cv_metrics
 from sklearn.model_selection import LeaveOneOut, StratifiedKFold
 from threadpoolctl import threadpool_limits
 
@@ -22,17 +22,44 @@ from utils import (ROOT, WORKFLOW_MODELS, workflow_data, frame_signature,
                    make_evaluation_model, disease_probability, result_row,
                    result_predictions, write_reports, dump_pickle)
 
-SEARCH_VERSION = 1
+SEARCH_VERSION = 3
+
+
+class _PrefixedTrial:
+    """Give independent Optuna names to each stacking base learner's controls."""
+    def __init__(self, trial, prefix):
+        self.trial, self.prefix = trial, prefix
+
+    def __getattr__(self, name):
+        method = getattr(self.trial, name)
+        return lambda key, *args, **kwargs: method(f"{self.prefix}__{key}", *args, **kwargs)
+
+
+def make_tuning_template(name, X, seed, top_k):
+    template = make_evaluation_model(name, X, seed, "rfe", top_k)
+    if name == "stacking":
+        template.set_params(estimators=[
+            (base, make_evaluation_model(base, X, seed, "rfe", top_k))
+            for base in ("xgboost", "lightgbm", "ridge")
+        ], stack_method="auto")
+        # RidgeClassifier supplies decision_function; boosting supplies probabilities.
+        # The existing StandardScaler + logistic(C=1) meta-model remains unchanged.
+    return template
 
 
 def suggest_parameters(trial, name):
-    """Only classifier settings are searched; RFE retains 20 source fields."""
+    """Classifier search settings; feature count is added jointly by the objective."""
     if name == "logistic":
         return {"model__C": trial.suggest_float("model__C", .01, 100, log=True)}
     if name == "stacking":
-        # Base pipelines remain fixed; tune the logistic meta-learner only.
-        return {"final_estimator__logistic__C": trial.suggest_float(
-            "final_estimator__logistic__C", .01, 100, log=True)}
+        # Joint base-learner search. The meta-model stays at its fixed C=1.
+        params = {}
+        for base in ("xgboost", "lightgbm"):
+            for key, value in suggest_parameters(_PrefixedTrial(trial, base), base).items():
+                params[f"{base}__{key}"] = value
+        params["ridge__model__alpha"] = trial.suggest_float(
+            "ridge__model__alpha", .01, 100, log=True)
+        return params
     params = {"model__n_estimators": trial.suggest_int("model__n_estimators", 40, 160, step=20)}
     if name == "random_forest":
         params.update({"model__max_depth": trial.suggest_int("model__max_depth", 2, 8),
@@ -53,43 +80,78 @@ def suggest_parameters(trial, name):
     return params
 
 
+def feature_counts(width, k_values=None):
+    choices = sorted(set(k_values if k_values is not None else
+                         [min(10, width), min(20, width), min(30, width), width]))
+    if not choices or any(not isinstance(k, (int, np.integer)) or not 1 <= k <= width for k in choices):
+        raise ValueError("Every feature-count candidate must be between 1 and the predictor count")
+    return choices
+
+
+def selection_parameters(trial, name, choices):
+    k = trial.suggest_categorical("feature_count", choices)
+    if name == "stacking":
+        return {f"{base}__select__n_features_to_select": k
+                for base in ("xgboost", "lightgbm", "ridge")}
+    return {"select__n_features_to_select": k}
+
+
 def tune_training_fold(name, X_train, y_train, *, seed=42, trials=20, inner_folds=3,
-                       top_k=20, sampler_seed=None):
+                       top_k=20, sampler_seed=None, k_values=None):
     """Return refitted best pipeline, best parameters, CV score, and trial evidence.
 
     No outer test features or labels are accepted by this function.
     """
-    if name == "dummy_prior":
-        fitted = DummyClassifier(strategy="prior", random_state=seed).fit(X_train, y_train)
-        return fitted, {}, None, pd.DataFrame()
-    import optuna
-    optuna.logging.set_verbosity(optuna.logging.WARNING)
+    if inner_folds != 3:
+        raise ValueError("Use exactly three inner folds for matched LOPO comparisons")
     cv = StratifiedKFold(n_splits=inner_folds, shuffle=True, random_state=seed)
-    splits = list(cv.split(X_train, y_train))
     if y_train.value_counts().min() < inner_folds:
         raise ValueError("Each class needs at least inner_folds training records")
-    template = make_evaluation_model(name, X_train, seed, "rfe", top_k)
+    splits = list(cv.split(X_train, y_train))
+    if name == "dummy_prior":
+        fold_metrics = []
+        for train_pos, valid_pos in splits:
+            candidate = DummyClassifier(strategy="prior", random_state=seed).fit(
+                X_train.iloc[train_pos], y_train.iloc[train_pos])
+            fold_metrics.append(classification_metrics(y_train.iloc[valid_pos],
+                disease_probability(candidate, X_train.iloc[valid_pos])))
+        fitted = DummyClassifier(strategy="prior", random_state=seed).fit(X_train, y_train)
+        fitted.lopo_validation_ = dict(folds=fold_metrics, best_trial=None)
+        return fitted, {}, float(np.mean([m['roc_auc'] for m in fold_metrics])), pd.DataFrame()
+    import optuna
+    optuna.logging.set_verbosity(optuna.logging.WARNING)
+    choices = feature_counts(X_train.shape[1], k_values)
+    template = make_tuning_template(name, X_train, seed, top_k)
 
     def objective(trial):
         params = suggest_parameters(trial, name)
+        params.update(selection_parameters(trial, name, choices))
+        trial.set_user_attr("pipeline_params", params)
         scores = []
+        fold_metrics = []
         for train_pos, valid_pos in splits:
             candidate = clone(template).set_params(**params)
             # Includes imputation, RFE, transformations and (if used) stacking CV.
             with threadpool_limits(limits=1):
                 candidate.fit(X_train.iloc[train_pos], y_train.iloc[train_pos])
                 probability = disease_probability(candidate, X_train.iloc[valid_pos])
-            scores.append(roc_auc_score(y_train.iloc[valid_pos], probability))
+            fold_metrics.append(classification_metrics(y_train.iloc[valid_pos], probability))
+            scores.append(fold_metrics[-1]["roc_auc"])
         trial.set_user_attr("inner_auc", scores)
+        trial.set_user_attr("validation_metrics", fold_metrics)
         return float(np.mean(scores))
 
     study = optuna.create_study(direction="maximize", sampler=optuna.samplers.TPESampler(
         seed=seed if sampler_seed is None else sampler_seed))
     study.optimize(objective, n_trials=trials, n_jobs=1)
-    fitted = clone(template).set_params(**study.best_params)
+    best_params = study.best_trial.user_attrs["pipeline_params"]
+    fitted = clone(template).set_params(**best_params)
     with threadpool_limits(limits=1):
         fitted.fit(X_train, y_train)
-    return fitted, study.best_params, study.best_value, study.trials_dataframe()
+    fitted.lopo_validation_ = dict(
+        folds=study.best_trial.user_attrs["validation_metrics"], best_trial=study.best_trial.number,
+        selected_k=study.best_params["feature_count"])
+    return fitted, best_params, study.best_value, study.trials_dataframe()
 
 
 def _write_json(path, payload):
@@ -100,12 +162,14 @@ def _write_json(path, payload):
 
 def run_optuna_lopo(*, seed=42, trials=20, inner_folds=3, top_k=20,
                     models=WORKFLOW_MODELS, output_dir=None, max_folds=None,
-                    refit_final=False):
+                    refit_final=False, k_values=None):
     """Run/resume nested evaluation. Returns (metrics, summary), or (None, None).
 
     max_folds limits the evaluated prefix for a smoke run, never the training
     dataset. Resume the same output directory without max_folds for all records.
     """
+    if inner_folds != 3:
+        raise ValueError("Use exactly three inner folds for matched LOPO comparisons")
     if trials < 1 or inner_folds < 2 or (max_folds is not None and max_folds < 1):
         raise ValueError("Positive trials/max_folds and at least two inner folds are required")
     if not 0 <= seed < 2**32:
@@ -116,14 +180,18 @@ def run_optuna_lopo(*, seed=42, trials=20, inner_folds=3, top_k=20,
     X, y = workflow_data()
     if not 1 <= top_k <= X.shape[1]:
         raise ValueError("top_k must be within the source feature count")
-    out = Path(output_dir) if output_dir else ROOT / "results/lopo_optuna"
+    choices = feature_counts(X.shape[1], k_values)
+    out = Path(output_dir) if output_dir else ROOT / "results/lopo_optuna_v3"
     out.mkdir(parents=True, exist_ok=True)
     config = dict(search_version=SEARCH_VERSION, signature=frame_signature(X, y),
                   seed=seed, trials=trials, inner_folds=inner_folds, top_k=top_k,
-                  models=list(models), threshold=.5, selection="rfe",
+                  models=list(models), threshold=.5, selection="rfe", k_values=choices,
+                  continuous_transform="PowerTransformer(method=yeo-johnson, standardize=True)",
                   objective="mean inner-fold ROC-AUC", rows=len(X),
                   positive_class="1 = gallstones present (source code 0)",
-                  stacking_search="logistic meta-learner C only; fixed base learners",
+                  stacking_search="XGBoost/LightGBM/ridge base learners; fixed logistic meta C=1",
+                  sampler_seed_rule="seed + outer fold; independent of model list/order",
+                  validation_reporting="best-trial three-fold means, sample SD and fold values",
                   packages={name: version(name) for name in (
                       "optuna", "scikit-learn", "numpy", "pandas", "xgboost", "lightgbm")})
     config_path = out / "run_config.json"
@@ -143,7 +211,7 @@ def run_optuna_lopo(*, seed=42, trials=20, inner_folds=3, top_k=20,
             break
         source_row = int(X.index[test_pos[0]])
         X_train, y_train = X.iloc[train_pos], y.iloc[train_pos]
-        for model_number, name in enumerate(models):
+        for name in models:
             checkpoint = folds / f"fold_{fold:04d}_{name}.json"
             if checkpoint.exists():
                 evidence = json.loads(checkpoint.read_text())
@@ -154,22 +222,26 @@ def run_optuna_lopo(*, seed=42, trials=20, inner_folds=3, top_k=20,
             else:
                 print(f"Leave One Patient Out {fold + 1}/{len(X)}: tuning {name}", flush=True)
                 started = perf_counter()
-                sampler_seed = (seed + fold * len(models) + model_number) % 2**32
+                sampler_seed = (seed + fold) % 2**32
                 fitted, params, score, trial_table = tune_training_fold(
                     name, X_train, y_train, seed=seed, trials=trials,
-                    inner_folds=inner_folds, top_k=top_k, sampler_seed=sampler_seed)
+                    inner_folds=inner_folds, top_k=top_k, sampler_seed=sampler_seed, k_values=choices)
                 with threadpool_limits(limits=1):
                     probability = float(disease_probability(fitted, X.iloc[test_pos])[0])
                 if not np.isfinite(probability) or not 0 <= probability <= 1:
                     raise ValueError("Nonfinite or invalid held-out probability")
                 trial_table.to_csv(folds / f"fold_{fold:04d}_{name}_trials.csv", index=False)
-                evidence = dict(fold=fold, source_row=source_row, model=name,
+                validation = fitted.lopo_validation_
+                evidence = dict(validation=validation, fold=fold, source_row=source_row, model=name,
                                 actual=int(y.iloc[test_pos[0]]), probability=probability,
                                 best_params=params, inner_cv_auc=score, sampler_seed=sampler_seed,
                                 fit_predict_seconds=perf_counter() - started)
                 # Commit after all evidence is written; interrupted studies restart.
                 _write_json(checkpoint, evidence)
+            if "validation" not in evidence:
+                raise ValueError("Checkpoint has no validation metrics; use a new output directory")
             completed.append(evidence)
+        write_cv_metrics(out / "CV_Metrics", completed, seed=seed, inner_folds=inner_folds)
         _write_json(out / "progress.json", dict(complete=False,
                     evaluated_folds=fold + 1, total_folds=len(X), models=list(models)))
     pd.DataFrame(completed).to_csv(out / "fold_best_parameters.csv", index=False)
@@ -195,7 +267,7 @@ def run_optuna_lopo(*, seed=42, trials=20, inner_folds=3, top_k=20,
         final_dir.mkdir(exist_ok=True)
         for name in models:
             fitted, params, score, trials_table = tune_training_fold(
-                name, X, y, seed=seed, trials=trials, inner_folds=inner_folds, top_k=top_k)
+                name, X, y, seed=seed, trials=trials, inner_folds=inner_folds, top_k=top_k, k_values=choices)
             dump_pickle(fitted, final_dir / f"{name}.pkl")
             trials_table.to_csv(final_dir / f"{name}_trials.csv", index=False)
             _write_json(final_dir / f"{name}_metadata.json", dict(best_params=params,
@@ -206,11 +278,12 @@ def run_optuna_lopo(*, seed=42, trials=20, inner_folds=3, top_k=20,
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--trials", type=int, default=20)
-    parser.add_argument("--inner-folds", type=int, default=3)
+    parser.add_argument("--inner-folds", type=int, choices=(3,), default=3)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--top-k", type=int, default=20)
+    parser.add_argument("--top-k", type=int, default=20, help="Initial template width; Optuna selects actual k")
+    parser.add_argument("--k-values", type=int, nargs="+", help="RFE feature counts; defaults to 10,20,30 and all predictors")
     parser.add_argument("--models", nargs="+", choices=WORKFLOW_MODELS, default=list(WORKFLOW_MODELS))
-    parser.add_argument("--output-dir", type=Path, default=ROOT / "results/lopo_optuna")
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "results/lopo_optuna_v3")
     parser.add_argument("--max-folds", type=int, help="Smoke-run prefix; omit for complete evaluation")
     parser.add_argument("--refit-final", action="store_true", help="Also tune/refit full-data inference models")
     args = parser.parse_args()

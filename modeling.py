@@ -5,7 +5,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier, StackingClassifier
 from sklearn.feature_selection import SelectPercentile, f_classif
 from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, RidgeClassifier
 from sklearn.model_selection import StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -48,6 +48,8 @@ def make_model(name, X, seed):
         )
     if name == "logistic":
         model = LogisticRegression(C=1.0, max_iter=3000, random_state=seed)
+    elif name == "ridge":
+        model = RidgeClassifier(alpha=1.0, random_state=seed)
     elif name == "random_forest":
         model = RandomForestClassifier(n_estimators=60, max_depth=5, min_samples_leaf=4,
                                        n_jobs=1, random_state=seed)
@@ -65,4 +67,4 @@ def make_model(name, X, seed):
                                n_jobs=1, random_state=seed)
     else:
         raise ValueError(f"Unknown model: {name}")
-    return make_pipeline(X, model, scale_numeric=name == "logistic")
+    return make_pipeline(X, model, scale_numeric=name in {"logistic", "ridge"})

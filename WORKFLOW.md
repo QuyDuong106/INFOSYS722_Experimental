@@ -1,3 +1,7 @@
+> Latest: search version 3 uses `PowerTransformer(method="yeo-johnson", standardize=True)` and jointly searches RFE k using `--k-values`. See LOPO_TUNING.md for the current command; older sections below document historical execution.
+
+> Current execution uses search version 2. Stacking now tunes XGBoost, LightGBM and ridge base learners with a fixed logistic meta learner and three inner folds. Use a fresh output directory. See [LOPO_TUNING.md](LOPO_TUNING.md). The manuscript's completed version-1 results and historical workflow descriptions below are preserved as provenance.
+
 # Final research-paper workflow
 
 The canonical repository is `INFOSYS722_Experimental`. The final IEEE paper is `main.tex` / `main.pdf`. Completed tuned results are in the five `results/optuna_<family>/` directories, rather than the default directory used for a new combined run. Run new experiments in a fresh output directory. The manuscript XAI figures use `scripts/build_xai_report.py` and the tuned logistic outer-fold models. The commands below document both current execution and historical stages.

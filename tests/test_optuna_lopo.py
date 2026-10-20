@@ -11,6 +11,8 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
+from sklearn.feature_selection import RFE
+from sklearn.tree import DecisionTreeClassifier
 
 import optuna_lopo as workflow
 
@@ -37,6 +39,7 @@ class OptunaLeaveOnePatientOutTests(unittest.TestCase):
     def test_preparation_refits_in_each_inner_training_fold(self):
         RecordingTransformer.fits = []
         template = Pipeline([('prepare', RecordingTransformer()),
+                             ('select', RFE(DecisionTreeClassifier(random_state=42), n_features_to_select=4)),
                              ('model', LogisticRegression())])
         # Outer test record 100 never enters the tuning function.
         X_train, y_train = self.X.iloc[1:], self.y.iloc[1:]
@@ -59,11 +62,14 @@ class OptunaLeaveOnePatientOutTests(unittest.TestCase):
 
         def fake_tuning(name, X, y, **kwargs):
             training_sets.append(list(X.index))
-            return DummyClassifier(strategy='prior').fit(X, y), {}, .5, pd.DataFrame()
+            fitted = DummyClassifier(strategy='prior').fit(X, y)
+            fitted.lopo_validation_ = dict(best_trial=0, folds=[dict(
+                accuracy=.5, roc_auc=.5, precision=.5, recall=.5, specificity=.5, sensitivity=.5) for _ in range(3)])
+            return fitted, {}, .5, pd.DataFrame()
 
         with tempfile.TemporaryDirectory() as temporary:
             out = Path(temporary)
-            kwargs = dict(models=['logistic'], trials=1, inner_folds=2, top_k=4,
+            kwargs = dict(models=['logistic'], trials=1, inner_folds=3, top_k=4,
                           output_dir=out)
             with patch.object(workflow, 'workflow_data', return_value=(self.X, self.y)), \
                     patch.object(workflow, 'tune_training_fold', side_effect=fake_tuning):
@@ -78,6 +84,11 @@ class OptunaLeaveOnePatientOutTests(unittest.TestCase):
                 self.assertEqual(len(training_sets), len(self.X))
                 predictions = pd.read_csv(out / 'predictions.csv')
                 self.assertEqual(len(predictions), len(self.X))
+                cv = pd.read_csv(out / 'CV_Metrics/logistic.csv')
+                self.assertEqual(len(cv), len(self.X))
+                self.assertTrue(cv.left_out_source_row.is_unique)
+                self.assertTrue((cv.seed == 42).all())
+                self.assertTrue((cv.recall == cv.sensitivity).all())
                 self.assertTrue(predictions.source_row.is_unique)
                 self.assertEqual(int(metrics.iloc[0]['rows']), len(self.X))
                 self.assertTrue(json.loads((out / 'progress.json').read_text())['complete'])
@@ -91,12 +102,15 @@ class OptunaLeaveOnePatientOutTests(unittest.TestCase):
 
         def fake_tuning(name, X, y, **kwargs):
             sizes.append(len(X))
-            return DummyClassifier(strategy='prior').fit(X, y), {}, .5, pd.DataFrame()
+            fitted = DummyClassifier(strategy='prior').fit(X, y)
+            fitted.lopo_validation_ = dict(best_trial=0, folds=[dict(
+                accuracy=.5, roc_auc=.5, precision=.5, recall=.5, specificity=.5, sensitivity=.5) for _ in range(3)])
+            return fitted, {}, .5, pd.DataFrame()
 
         with tempfile.TemporaryDirectory() as temporary:
             with patch.object(workflow, 'workflow_data', return_value=(self.X, self.y)), \
                     patch.object(workflow, 'tune_training_fold', side_effect=fake_tuning):
-                workflow.run_optuna_lopo(models=['logistic'], trials=1, inner_folds=2,
+                workflow.run_optuna_lopo(models=['logistic'], trials=1, inner_folds=3,
                     top_k=4, output_dir=temporary, refit_final=True)
             self.assertEqual(sizes[:-1], [23] * 24)
             self.assertEqual(sizes[-1], 24)

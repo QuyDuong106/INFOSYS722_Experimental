@@ -1,0 +1,58 @@
+{
+  "validation": {
+    "folds": [
+      {
+        "accuracy": 0.8018867924528302,
+        "roc_auc": 0.8518518518518519,
+        "precision": 0.7619047619047619,
+        "recall": 0.8888888888888888,
+        "specificity": 0.7115384615384616,
+        "sensitivity": 0.8888888888888888
+      },
+      {
+        "accuracy": 0.8207547169811321,
+        "roc_auc": 0.9003203987184051,
+        "precision": 0.84,
+        "recall": 0.7924528301886793,
+        "specificity": 0.8490566037735849,
+        "sensitivity": 0.7924528301886793
+      },
+      {
+        "accuracy": 0.8207547169811321,
+        "roc_auc": 0.8810964756140975,
+        "precision": 0.8035714285714286,
+        "recall": 0.8490566037735849,
+        "specificity": 0.7924528301886793,
+        "sensitivity": 0.8490566037735849
+      }
+    ],
+    "best_trial": 16,
+    "selected_k": 38
+  },
+  "fold": 120,
+  "source_row": 120,
+  "model": "stacking",
+  "actual": 1,
+  "probability": 0.7066760474229961,
+  "best_params": {
+    "xgboost__model__n_estimators": 140,
+    "xgboost__model__learning_rate": 0.1130048600602389,
+    "xgboost__model__colsample_bytree": 0.6013656343864229,
+    "xgboost__model__reg_lambda": 6.220837395112282,
+    "xgboost__model__max_depth": 4,
+    "xgboost__model__subsample": 0.8267443894762607,
+    "lightgbm__model__n_estimators": 160,
+    "lightgbm__model__learning_rate": 0.05942147902188024,
+    "lightgbm__model__colsample_bytree": 0.6269749370033515,
+    "lightgbm__model__reg_lambda": 0.10875484052121291,
+    "lightgbm__model__num_leaves": 3,
+    "lightgbm__model__min_child_samples": 37,
+    "ridge__model__alpha": 0.29312038458872486,
+    "xgboost__select__n_features_to_select": 38,
+    "lightgbm__select__n_features_to_select": 38,
+    "ridge__select__n_features_to_select": 38
+  },
+  "inner_cv_auc": 0.8777562420614515,
+  "sampler_seed": 162,
+  "fit_predict_seconds": 83.28397591691464
+}

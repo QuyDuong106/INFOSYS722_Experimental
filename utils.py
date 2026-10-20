@@ -133,7 +133,7 @@ def make_evaluation_model(name, X, seed, selection="rfe", top_k=20):
     from sklearn.feature_selection import RFE, SelectFromModel
     from sklearn.impute import SimpleImputer
     from sklearn.pipeline import Pipeline
-    from sklearn.preprocessing import OneHotEncoder, PowerTransformer, StandardScaler
+    from sklearn.preprocessing import OneHotEncoder, PowerTransformer
     from sklearn.tree import DecisionTreeClassifier
     from modeling import make_model
 
@@ -161,8 +161,7 @@ def make_evaluation_model(name, X, seed, selection="rfe", top_k=20):
     selector.set_output(transform="pandas")
     transform = ColumnTransformer([
         ("continuous", Pipeline([
-            ("yeo_johnson", PowerTransformer(method="yeo-johnson", standardize=False)),
-            ("standardize", StandardScaler()),
+            ("yeo_johnson", PowerTransformer(method="yeo-johnson", standardize=True)),
         ]), continuous_columns),
         ("categorical", OneHotEncoder(handle_unknown="ignore", sparse_output=False), categorical_columns),
     ])
