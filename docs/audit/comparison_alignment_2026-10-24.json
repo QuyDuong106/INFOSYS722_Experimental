@@ -1,0 +1,178 @@
+{
+  "date": "2026-10-24",
+  "passed": true,
+  "matched_config_fields": [
+    "signature",
+    "source_fingerprint",
+    "seed",
+    "trials",
+    "inner_folds",
+    "threshold",
+    "selection",
+    "k_values",
+    "continuous_transform",
+    "objective",
+    "packages",
+    "sampler_seed_rule"
+  ],
+  "models": [
+    {
+      "model": "logistic",
+      "source": "results/dynamic_individual_v4",
+      "selected_k_counts": {
+        "38": 290,
+        "30": 10,
+        "20": 13,
+        "10": 6
+      },
+      "metrics": {
+        "seed": 42,
+        "evaluation": "lopo_optuna",
+        "rows": 319,
+        "roc_auc": 0.8730246088528971,
+        "average_precision": 0.8136030454443223,
+        "accuracy": 0.8150470219435737,
+        "balanced_accuracy": 0.8144115103388632,
+        "precision": 0.7802197802197802,
+        "recall": 0.8819875776397516,
+        "specificity": 0.7468354430379747,
+        "f1": 0.8279883381924198,
+        "log_loss": 0.4978817044093868,
+        "TN": 118,
+        "FP": 40,
+        "FN": 19,
+        "TP": 142,
+        "fit_predict_seconds": 2675.0868006832898,
+        "selection": "rfe",
+        "fnr": 0.1180124223602484
+      }
+    },
+    {
+      "model": "random_forest",
+      "source": "results/dynamic_individual_v4",
+      "selected_k_counts": {
+        "30": 120,
+        "38": 126,
+        "10": 47,
+        "20": 26
+      },
+      "metrics": {
+        "seed": 42,
+        "evaluation": "lopo_optuna",
+        "rows": 319,
+        "roc_auc": 0.8385879393034044,
+        "average_precision": 0.8267260918526792,
+        "accuracy": 0.7774294670846394,
+        "balanced_accuracy": 0.7772623633933485,
+        "precision": 0.7710843373493976,
+        "recall": 0.7950310559006211,
+        "specificity": 0.759493670886076,
+        "f1": 0.7828746177370031,
+        "log_loss": 0.5080465839081206,
+        "TN": 120,
+        "FP": 38,
+        "FN": 33,
+        "TP": 128,
+        "fit_predict_seconds": 3694.209469293942,
+        "selection": "rfe",
+        "fnr": 0.2049689440993788
+      }
+    },
+    {
+      "model": "xgboost",
+      "source": "results/dynamic_individual_v4",
+      "selected_k_counts": {
+        "38": 173,
+        "30": 100,
+        "20": 20,
+        "10": 26
+      },
+      "metrics": {
+        "seed": 42,
+        "evaluation": "lopo_optuna",
+        "rows": 319,
+        "roc_auc": 0.8448384306942369,
+        "average_precision": 0.8006124500626653,
+        "accuracy": 0.780564263322884,
+        "balanced_accuracy": 0.7804269203553738,
+        "precision": 0.7757575757575758,
+        "recall": 0.7950310559006211,
+        "specificity": 0.7658227848101266,
+        "f1": 0.7852760736196319,
+        "log_loss": 0.502084562511568,
+        "TN": 121,
+        "FP": 37,
+        "FN": 33,
+        "TP": 128,
+        "fit_predict_seconds": 2948.2119909571484,
+        "selection": "rfe",
+        "fnr": 0.2049689440993788
+      }
+    },
+    {
+      "model": "lightgbm",
+      "source": "results/dynamic_individual_v4",
+      "selected_k_counts": {
+        "38": 151,
+        "30": 114,
+        "20": 21,
+        "10": 33
+      },
+      "metrics": {
+        "seed": 42,
+        "evaluation": "lopo_optuna",
+        "rows": 319,
+        "roc_auc": 0.8464895038918154,
+        "average_precision": 0.8186671727127497,
+        "accuracy": 0.774294670846395,
+        "balanced_accuracy": 0.7742157402311503,
+        "precision": 0.7730061349693251,
+        "recall": 0.782608695652174,
+        "specificity": 0.7658227848101266,
+        "f1": 0.7777777777777778,
+        "log_loss": 0.495921817637742,
+        "TN": 121,
+        "FP": 37,
+        "FN": 35,
+        "TP": 126,
+        "fit_predict_seconds": 2811.0245462488383,
+        "selection": "rfe",
+        "fnr": 0.217391304347826
+      }
+    },
+    {
+      "model": "stacking",
+      "source": "results/stacking_v4",
+      "selected_k_counts": {
+        "38": 239,
+        "30": 34,
+        "20": 45,
+        "10": 1
+      },
+      "metrics": {
+        "seed": 42,
+        "evaluation": "lopo_optuna",
+        "rows": 319,
+        "roc_auc": 0.876169510181618,
+        "average_precision": 0.8220407573660728,
+        "accuracy": 0.8056426332288401,
+        "balanced_accuracy": 0.8053306077521818,
+        "precision": 0.7894736842105263,
+        "recall": 0.8385093167701864,
+        "specificity": 0.7721518987341772,
+        "f1": 0.8132530120481928,
+        "log_loss": 0.4481329367590623,
+        "TN": 122,
+        "FP": 36,
+        "FN": 26,
+        "TP": 135,
+        "fit_predict_seconds": 31181.8297571172,
+        "selection": "rfe",
+        "fnr": 0.1614906832298136
+      }
+    }
+  ],
+  "stacking_v3_v4_predictions_identical": true,
+  "selector_plot_matches_latest_saved_evidence": true,
+  "scope": "Configuration, training-source hashes, seeds, metrics, checkpoint k and saved outer selector evidence; not independent external validation"
+}

@@ -1,0 +1,8 @@
+model,selection,evaluation,metric,n_runs,mean,variance,std
+stacking,rfe,lopo_optuna,accuracy,1,0.8056426332288401,,
+stacking,rfe,lopo_optuna,f1,1,0.8132530120481928,,
+stacking,rfe,lopo_optuna,fnr,1,0.16149068322981366,,
+stacking,rfe,lopo_optuna,precision,1,0.7894736842105263,,
+stacking,rfe,lopo_optuna,recall,1,0.8385093167701864,,
+stacking,rfe,lopo_optuna,roc_auc,1,0.876169510181618,,
+stacking,rfe,lopo_optuna,specificity,1,0.7721518987341772,,

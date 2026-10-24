@@ -1,0 +1,263 @@
+{
+  "rows": 319,
+  "source_features": 38,
+  "continuous_fields": [
+    "age",
+    "height",
+    "weight",
+    "bmi",
+    "tbw",
+    "ecw",
+    "icw",
+    "ecf_tbw",
+    "tbfr_pct",
+    "lm_pct",
+    "protein_pct",
+    "vfr",
+    "bm",
+    "mm",
+    "obesity_pct",
+    "tfc",
+    "vfa",
+    "vma_kg",
+    "glucose",
+    "tc",
+    "ldl",
+    "hdl",
+    "triglyceride",
+    "ast",
+    "alt",
+    "alp",
+    "creatinine",
+    "gfr",
+    "crp",
+    "hgb",
+    "vitamin_d"
+  ],
+  "categorical_codes": {
+    "gender": [
+      0,
+      1
+    ],
+    "comorbidity": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "cad": [
+      0,
+      1
+    ],
+    "hypothyroidism": [
+      0,
+      1
+    ],
+    "hyperlipidemia": [
+      0,
+      1
+    ],
+    "dm": [
+      0,
+      1
+    ],
+    "hfa": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "saved_pipeline_checks": [
+    {
+      "model": "logistic",
+      "source_row": 0,
+      "selected_k": 38,
+      "steps": [
+        "impute",
+        "select",
+        "transform",
+        "model"
+      ],
+      "power_method": "yeo-johnson",
+      "standardize": true,
+      "categorical_inputs": [
+        "gender",
+        "comorbidity",
+        "cad",
+        "hypothyroidism",
+        "hyperlipidemia",
+        "dm",
+        "hfa"
+      ],
+      "encoded_features": [
+        "gender_0",
+        "gender_1",
+        "comorbidity_0",
+        "comorbidity_1",
+        "comorbidity_2",
+        "comorbidity_3",
+        "cad_0",
+        "cad_1",
+        "hypothyroidism_0",
+        "hypothyroidism_1",
+        "hyperlipidemia_0",
+        "hyperlipidemia_1",
+        "dm_0",
+        "dm_1",
+        "hfa_0",
+        "hfa_1",
+        "hfa_2",
+        "hfa_3",
+        "hfa_4"
+      ],
+      "transformed_count": 50
+    },
+    {
+      "model": "random_forest",
+      "source_row": 0,
+      "selected_k": 30,
+      "steps": [
+        "impute",
+        "select",
+        "transform",
+        "model"
+      ],
+      "power_method": "yeo-johnson",
+      "standardize": true,
+      "categorical_inputs": [
+        "gender",
+        "comorbidity",
+        "cad",
+        "hypothyroidism",
+        "hyperlipidemia",
+        "dm",
+        "hfa"
+      ],
+      "encoded_features": [
+        "gender_0",
+        "gender_1",
+        "comorbidity_0",
+        "comorbidity_1",
+        "comorbidity_2",
+        "comorbidity_3",
+        "cad_0",
+        "cad_1",
+        "hypothyroidism_0",
+        "hypothyroidism_1",
+        "hyperlipidemia_0",
+        "hyperlipidemia_1",
+        "dm_0",
+        "dm_1",
+        "hfa_0",
+        "hfa_1",
+        "hfa_2",
+        "hfa_3",
+        "hfa_4"
+      ],
+      "transformed_count": 42
+    },
+    {
+      "model": "xgboost",
+      "source_row": 0,
+      "selected_k": 38,
+      "steps": [
+        "impute",
+        "select",
+        "transform",
+        "model"
+      ],
+      "power_method": "yeo-johnson",
+      "standardize": true,
+      "categorical_inputs": [
+        "gender",
+        "comorbidity",
+        "cad",
+        "hypothyroidism",
+        "hyperlipidemia",
+        "dm",
+        "hfa"
+      ],
+      "encoded_features": [
+        "gender_0",
+        "gender_1",
+        "comorbidity_0",
+        "comorbidity_1",
+        "comorbidity_2",
+        "comorbidity_3",
+        "cad_0",
+        "cad_1",
+        "hypothyroidism_0",
+        "hypothyroidism_1",
+        "hyperlipidemia_0",
+        "hyperlipidemia_1",
+        "dm_0",
+        "dm_1",
+        "hfa_0",
+        "hfa_1",
+        "hfa_2",
+        "hfa_3",
+        "hfa_4"
+      ],
+      "transformed_count": 50
+    },
+    {
+      "model": "lightgbm",
+      "source_row": 0,
+      "selected_k": 38,
+      "steps": [
+        "impute",
+        "select",
+        "transform",
+        "model"
+      ],
+      "power_method": "yeo-johnson",
+      "standardize": true,
+      "categorical_inputs": [
+        "gender",
+        "comorbidity",
+        "cad",
+        "hypothyroidism",
+        "hyperlipidemia",
+        "dm",
+        "hfa"
+      ],
+      "encoded_features": [
+        "gender_0",
+        "gender_1",
+        "comorbidity_0",
+        "comorbidity_1",
+        "comorbidity_2",
+        "comorbidity_3",
+        "cad_0",
+        "cad_1",
+        "hypothyroidism_0",
+        "hypothyroidism_1",
+        "hyperlipidemia_0",
+        "hyperlipidemia_1",
+        "dm_0",
+        "dm_1",
+        "hfa_0",
+        "hfa_1",
+        "hfa_2",
+        "hfa_3",
+        "hfa_4"
+      ],
+      "transformed_count": 50
+    }
+  ],
+  "continuous_only_check": {
+    "input_fields": 31,
+    "selected_fields": 10,
+    "categorical_fields": 0,
+    "probabilities": [
+      [
+        0.08128822076656794,
+        0.9187117792334321
+      ]
+    ],
+    "passed": true
+  },
+  "training_source_fingerprint_matches": true
+}

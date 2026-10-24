@@ -33,6 +33,7 @@ def main():
     parser.add_argument('--output-dir', type=Path, help='Directory for nested Leave One Patient Out evidence')
     parser.add_argument('--max-folds', type=int, help='Partial Leave One Patient Out smoke run')
     parser.add_argument('--refit-final', action='store_true')
+    parser.add_argument('--save-fold-models', action='store_true', help='Persist outer-fold models for XAI')
     parser.add_argument('--fixed-lopo', action='store_true', help='Run the historical fixed-parameter notebook instead')
     args = parser.parse_args()
     names = list(STAGES)
@@ -41,8 +42,8 @@ def main():
         parser.error('--from-stage must precede --to-stage')
     if args.max_folds is not None and (start != names.index('lopo') or end != start):
         parser.error('--max-folds requires --from-stage lopo --to-stage lopo')
-    if args.fixed_lopo and (args.max_folds is not None or args.refit_final):
-        parser.error('--max-folds and --refit-final apply only to Optuna, not --fixed-lopo')
+    if args.fixed_lopo and (args.max_folds is not None or args.refit_final or args.save_fold_models):
+        parser.error('--max-folds, --refit-final and --save-fold-models apply only to Optuna, not --fixed-lopo')
     if args.list:
         for name in names[start:end + 1]:
             print(f'{name:10} {"notebooks/leave_one_out_method.ipynb" if name == "lopo" and args.fixed_lopo else STAGES[name] or "unittest discovery"}')
@@ -72,6 +73,8 @@ def main():
                 command += ['--max-folds', str(args.max_folds)]
             if args.refit_final:
                 command += ['--refit-final']
+            if args.save_fold_models:
+                command += ['--save-fold-models']
         elif path is None:
             command = [sys.executable, '-m', 'unittest', 'discover', '-s', 'tests', '-v']
         elif path.endswith('.ipynb'):

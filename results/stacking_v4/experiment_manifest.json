@@ -1,0 +1,320 @@
+{
+  "manifest_version": 1,
+  "model": "stacking",
+  "bases": [
+    "xgboost",
+    "lightgbm",
+    "ridge"
+  ],
+  "cohort_signature": "d14de55c7bec0a380289be7ecb459ab34d611980e1320e4e9875d84673bddffe",
+  "rows": 319,
+  "source_features": [
+    "age",
+    "gender",
+    "comorbidity",
+    "cad",
+    "hypothyroidism",
+    "hyperlipidemia",
+    "dm",
+    "height",
+    "weight",
+    "bmi",
+    "tbw",
+    "ecw",
+    "icw",
+    "ecf_tbw",
+    "tbfr_pct",
+    "lm_pct",
+    "protein_pct",
+    "vfr",
+    "bm",
+    "mm",
+    "obesity_pct",
+    "tfc",
+    "vfa",
+    "vma_kg",
+    "hfa",
+    "glucose",
+    "tc",
+    "ldl",
+    "hdl",
+    "triglyceride",
+    "ast",
+    "alt",
+    "alp",
+    "creatinine",
+    "gfr",
+    "crp",
+    "hgb",
+    "vitamin_d"
+  ],
+  "reference_directory": "/Users/quyduong106/projects/INFOSYS722_Experimental/results/dynamic_individual_v4",
+  "reference_config_sha256": "442f6ef76c177c38559e34d1e99c7ae3ffc08776d084c5e156fe0f39c076386a",
+  "reference_predictions_sha256": "182dcc419f90e5ffb68cdad6fd592ac0435c476294645740149d6fdadf23dac9",
+  "raw_data_sha256": "2f19bd36c8be470daa62feba2e64af416d1eb7c3c4fe997987cc1b92d171a32d",
+  "source_sha256": {
+    "optuna_lopo.py": "bfd35d1fcb080d6bc73d63aac5312da36c5ca289000c2189ae008347aebd8eb1",
+    "utils.py": "b902f89845bff08166c29c616ac6a5a5558fde9d3e0aeeb32bfcc1c3b72e26d4",
+    "modeling.py": "9fe04f5cc1035d9c90fe9d3999f76c5b549b74930e07d56b89e3fe8693377fac",
+    "cv_reporting.py": "a8d1a847856e2cccba355da7de31992b67017e049c8e1c80f232cb9507945236",
+    "feature_selection_evidence.py": "7bba96b345cb065385edc1837345b78bb33257aebac1085eee1d492cd62e2b08",
+    "scripts/tune_stacking.py": "133627cc68cc785d0df79680343c68a74e50d90489295545caabf89fef86d056"
+  },
+  "packages": {
+    "optuna": "5.0.0",
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "xgboost": "3.4.1",
+    "lightgbm": "4.7.0"
+  },
+  "python_version": "3.13.5",
+  "protocol": {
+    "seed": 42,
+    "trials": 20,
+    "inner_folds": 3,
+    "k_values": [
+      10,
+      20,
+      30,
+      38
+    ],
+    "threshold": 0.5,
+    "selection": "CART RFE before transformation and one-hot encoding",
+    "objective": "mean inner-fold ROC-AUC",
+    "sampler": "Optuna TPESampler; versioned library defaults",
+    "sampler_seed": "(seed + zero-based outer fold) modulo 2**32",
+    "stacking_cv": "StratifiedKFold(3, shuffle=True, random_state=seed)",
+    "meta_classifier": "StandardScaler + LogisticRegression(C=1, max_iter=3000)",
+    "passthrough": false,
+    "save_fold_models": true
+  },
+  "search_spaces": {
+    "logistic": {
+      "model__C": {
+        "type": "float",
+        "low": 0.01,
+        "high": 100,
+        "log": true
+      },
+      "feature_count": {
+        "type": "categorical",
+        "choices": [
+          10,
+          20,
+          30,
+          38
+        ]
+      }
+    },
+    "random_forest": {
+      "model__n_estimators": {
+        "type": "int",
+        "low": 40,
+        "high": 160,
+        "step": 20
+      },
+      "model__max_depth": {
+        "type": "int",
+        "low": 2,
+        "high": 8
+      },
+      "model__min_samples_leaf": {
+        "type": "int",
+        "low": 2,
+        "high": 10
+      },
+      "model__max_features": {
+        "type": "categorical",
+        "choices": [
+          "sqrt",
+          0.5,
+          1.0
+        ]
+      },
+      "feature_count": {
+        "type": "categorical",
+        "choices": [
+          10,
+          20,
+          30,
+          38
+        ]
+      }
+    },
+    "xgboost": {
+      "model__n_estimators": {
+        "type": "int",
+        "low": 40,
+        "high": 160,
+        "step": 20
+      },
+      "model__learning_rate": {
+        "type": "float",
+        "low": 0.01,
+        "high": 0.15,
+        "log": true
+      },
+      "model__colsample_bytree": {
+        "type": "float",
+        "low": 0.6,
+        "high": 1.0
+      },
+      "model__reg_lambda": {
+        "type": "float",
+        "low": 0.1,
+        "high": 10,
+        "log": true
+      },
+      "model__max_depth": {
+        "type": "int",
+        "low": 1,
+        "high": 4
+      },
+      "model__subsample": {
+        "type": "float",
+        "low": 0.6,
+        "high": 1.0
+      },
+      "feature_count": {
+        "type": "categorical",
+        "choices": [
+          10,
+          20,
+          30,
+          38
+        ]
+      }
+    },
+    "lightgbm": {
+      "model__n_estimators": {
+        "type": "int",
+        "low": 40,
+        "high": 160,
+        "step": 20
+      },
+      "model__learning_rate": {
+        "type": "float",
+        "low": 0.01,
+        "high": 0.15,
+        "log": true
+      },
+      "model__colsample_bytree": {
+        "type": "float",
+        "low": 0.6,
+        "high": 1.0
+      },
+      "model__reg_lambda": {
+        "type": "float",
+        "low": 0.1,
+        "high": 10,
+        "log": true
+      },
+      "model__num_leaves": {
+        "type": "int",
+        "low": 3,
+        "high": 15
+      },
+      "model__min_child_samples": {
+        "type": "int",
+        "low": 10,
+        "high": 40
+      },
+      "feature_count": {
+        "type": "categorical",
+        "choices": [
+          10,
+          20,
+          30,
+          38
+        ]
+      }
+    },
+    "stacking": {
+      "xgboost__model__n_estimators": {
+        "type": "int",
+        "low": 40,
+        "high": 160,
+        "step": 20
+      },
+      "xgboost__model__learning_rate": {
+        "type": "float",
+        "low": 0.01,
+        "high": 0.15,
+        "log": true
+      },
+      "xgboost__model__colsample_bytree": {
+        "type": "float",
+        "low": 0.6,
+        "high": 1.0
+      },
+      "xgboost__model__reg_lambda": {
+        "type": "float",
+        "low": 0.1,
+        "high": 10,
+        "log": true
+      },
+      "xgboost__model__max_depth": {
+        "type": "int",
+        "low": 1,
+        "high": 4
+      },
+      "xgboost__model__subsample": {
+        "type": "float",
+        "low": 0.6,
+        "high": 1.0
+      },
+      "lightgbm__model__n_estimators": {
+        "type": "int",
+        "low": 40,
+        "high": 160,
+        "step": 20
+      },
+      "lightgbm__model__learning_rate": {
+        "type": "float",
+        "low": 0.01,
+        "high": 0.15,
+        "log": true
+      },
+      "lightgbm__model__colsample_bytree": {
+        "type": "float",
+        "low": 0.6,
+        "high": 1.0
+      },
+      "lightgbm__model__reg_lambda": {
+        "type": "float",
+        "low": 0.1,
+        "high": 10,
+        "log": true
+      },
+      "lightgbm__model__num_leaves": {
+        "type": "int",
+        "low": 3,
+        "high": 15
+      },
+      "lightgbm__model__min_child_samples": {
+        "type": "int",
+        "low": 10,
+        "high": 40
+      },
+      "ridge__model__alpha": {
+        "type": "float",
+        "low": 0.01,
+        "high": 100,
+        "log": true
+      },
+      "feature_count": {
+        "type": "categorical",
+        "choices": [
+          10,
+          20,
+          30,
+          38
+        ]
+      }
+    }
+  },
+  "budget_matches_reference": true,
+  "comparison_scope": "Same validation design and candidate-trial budget; not equal compute, search dimension, or proven convergence",
+  "interpretation": "Internal descriptive comparison; no independently validated winner or statistical superiority claim"
+}

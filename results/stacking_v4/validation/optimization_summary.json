@@ -1,0 +1,12 @@
+{
+  "completed_outer_folds": 319,
+  "total_outer_folds": 319,
+  "complete": true,
+  "completed_trials": 6380,
+  "recorded_inner_evaluations": 19140,
+  "parameters_searched": 14,
+  "total_recorded_trial_seconds": 59607.582739,
+  "total_recorded_fit_predict_seconds": 31181.8297571172,
+  "metric_scope": "Inner metrics describe optimisation; use pooled outer predictions for reported performance",
+  "timing_scope": "Observed run time, not a controlled equal-compute benchmark"
+}

@@ -4,7 +4,7 @@
 
 # Final research-paper workflow
 
-The canonical repository is `INFOSYS722_Experimental`. The final IEEE paper is `main.tex` / `main.pdf`. Completed tuned results are in the five `results/optuna_<family>/` directories, rather than the default directory used for a new combined run. Run new experiments in a fresh output directory. The manuscript XAI figures use `scripts/build_xai_report.py` and the tuned logistic outer-fold models. The commands below document both current execution and historical stages.
+The canonical repository is `INFOSYS722_Experimental`. The final DESRIST paper is `main.tex` / `main.pdf`. Completed tuned results are in the five `results/optuna_<family>/` directories, rather than the default directory used for a new combined run. Run new experiments in a fresh output directory. The manuscript XAI figures use `scripts/build_xai_report.py` and the Stacking outer-fold models from `results/stacking_v3`. The two XAI notebooks inspect these same artifacts. The commands below document both current execution and historical stages.
 
 ## Leave One Patient Out with nested Optuna tuning
 
@@ -266,7 +266,7 @@ rerun changes results, reconcile those passages before compiling a new report.
 | `results/iteration_patterns/cycle_metrics.csv` | Ten rows: five paired seeds for each of 20 and 10 predictors. |
 | `results/iteration_patterns/cycle_summary.csv` | Submitted reference: mean validation AUC approximately 0.838 versus 0.816, and sensitivity 0.758 versus 0.750, for 20 versus 10 predictors. |
 | `results/iteration_patterns/protocol.json` | Source-data signature, seeds, controlled change and validation-only evaluation boundary. |
-| `generated/holdout_lopo_comparison.tex` | Comparison uses the same fixed RFE–CART families for holdout and LOPO; validation and test columns remain separate. |
+| Legacy comparison source (recovery archive) | Comparison uses the same fixed RFE–CART families for holdout and LOPO; validation and test columns remain separate. |
 
 Prediction counts are evaluation appearances, not numbers of unique patients.
 Use the same data, row order, settings and package versions when investigating

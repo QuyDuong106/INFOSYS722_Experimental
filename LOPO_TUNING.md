@@ -1,4 +1,12 @@
-# Latest change: joint feature-count search
+# Current version 4: dynamic individual-model tuning and saved features
+
+The current engine saves training-only feature-selection evidence and optional fitted outer pipelines. Use `scripts/tune_dynamic_models.py` for logistic regression, random forest, XGBoost and LightGBM without rerunning Stacking. It saves fold models by default. See [the full commands and output schema](docs/DYNAMIC_FEATURE_TUNING.md).
+
+Current runs require **new result directories**, such as `results/dynamic_individual_v4`. Source fingerprints prevent mixing code versions on resume. The historical version-3 commands and descriptions below document existing evidence; they are not resume commands for version 4. Reading and explaining saved Stacking evidence remains supported.
+
+---
+
+# Historical version 3: joint feature-count search
 
 Search version 3 jointly tunes RFE feature count and classifier/base-learner parameters using only the three inner training-CV folds. The default candidates for the 38-predictor dataset are **10, 20, 30 and 38**; override them with `--k-values`. In stacking, one candidate k is shared across XGBoost, LightGBM and ridge within each trial, and each base learner refits its own selector inside its training folds. The logistic meta learner remains fixed.
 
@@ -20,7 +28,7 @@ Use a new output directory: versions 1 and 2 are incompatible with this search. 
 
 # Nested LOPO tuning: search version 3
 
-The new implementation changes future execution only. Completed `results/optuna_*` evidence and the manuscript still describe the historical four-base stacking model with meta-only tuning. No version-2 scores have been substituted for those observed results.
+Historical `results/optuna_*` evidence remains preserved. The manuscript now retains only completed version-3 base-tuned stacking from `results/stacking_v3`; no incomplete version-2 results are reported.
 
 ## Stacking and fair validation
 
@@ -87,4 +95,8 @@ Choose the voter set and tie policy before assessment. Combining already inspect
 
 ## Completed version-3 stacking evidence
 
-`results/stacking_v3` contains a complete 319-patient, seed-42 run with twenty trials per outer exclusion (6,380 complete trials). Pooled AUC is 0.8761695102, accuracy 0.8056426332, sensitivity 0.8385093168 and specificity 0.7721518987. Its selected-k frequencies are {10: 1, 20: 45, 30: 34, 38: 239}. The paper reports these observed scores separately from the historical meta-only stacking experiment. No new standalone k-search results are claimed. Resume this completed configuration using `--models stacking --trials 20 --inner-folds 3 --seed 42 --k-values 10 20 30 38 --output-dir results/stacking_v3`; changed settings need another output directory.
+`results/stacking_v3` contains a complete 319-patient, seed-42 run with twenty trials per outer exclusion (6,380 complete trials). Pooled AUC is 0.8761695102, accuracy 0.8056426332, sensitivity 0.8385093168 and specificity 0.7721518987. Its selected-k frequencies are {10: 1, 20: 45, 30: 34, 38: 239}. The paper retains this as its only stacking configuration; historical meta-only stacking evidence remains on disk for provenance. No new standalone k-search results are claimed. Version-4 execution treats this directory as historical evidence; do not resume it with the current engine. Use the original version-3 code to reproduce that run, and a fresh directory for new settings.
+
+## Stacking with complete provenance
+
+The dedicated current entry point is `scripts/tune_stacking.py`. It fixes the comparison against the completed four-model dynamic experiment and always saves evaluated fold pipelines and validation/feature records. See [the rerun guide](docs/STACKING_PROVENANCE_RERUN.md). Use a new `results/stacking_v4` directory; retain `stacking_v3` until the new evaluation and explanations are verified.

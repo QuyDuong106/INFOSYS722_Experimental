@@ -26,7 +26,7 @@ results/optuna_*/
 results/xai/
 
 # Reproducible final-paper builds and local caches
-ieee_build/
+build/
 xai_build/
 *.lof
 *.lot
@@ -38,3 +38,11 @@ xai_build/
 !results/optuna_stacking/
 
 .venv
+
+# New dynamic-model runs include per-fold pipelines and selection evidence.
+results/dynamic_individual_v4*/
+results/lopo_optuna_v4/
+
+# Completed version-4 evidence is published; partial smoke runs stay local.
+!results/dynamic_individual_v4/
+results/stacking_v4_smoke*/

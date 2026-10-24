@@ -1,0 +1,46 @@
+{
+  "search_version": 4,
+  "signature": "d14de55c7bec0a380289be7ecb459ab34d611980e1320e4e9875d84673bddffe",
+  "seed": 42,
+  "trials": 20,
+  "inner_folds": 3,
+  "top_k": 20,
+  "models": [
+    "logistic",
+    "random_forest",
+    "xgboost",
+    "lightgbm"
+  ],
+  "threshold": 0.5,
+  "selection": "rfe",
+  "k_values": [
+    10,
+    20,
+    30,
+    38
+  ],
+  "continuous_transform": "PowerTransformer(method=yeo-johnson, standardize=True)",
+  "objective": "mean inner-fold ROC-AUC",
+  "rows": 319,
+  "positive_class": "1 = gallstones present (source code 0)",
+  "stacking_search": "XGBoost/LightGBM/ridge base learners; fixed logistic meta C=1",
+  "sampler_seed_rule": "seed + outer fold; independent of model list/order",
+  "validation_reporting": "best-trial three-fold means, sample SD and fold values",
+  "source_fingerprint": {
+    "optuna_lopo.py": "bfd35d1fcb080d6bc73d63aac5312da36c5ca289000c2189ae008347aebd8eb1",
+    "utils.py": "b902f89845bff08166c29c616ac6a5a5558fde9d3e0aeeb32bfcc1c3b72e26d4",
+    "modeling.py": "9fe04f5cc1035d9c90fe9d3999f76c5b549b74930e07d56b89e3fe8693377fac",
+    "cv_reporting.py": "a8d1a847856e2cccba355da7de31992b67017e049c8e1c80f232cb9507945236",
+    "feature_selection_evidence.py": "7bba96b345cb065385edc1837345b78bb33257aebac1085eee1d492cd62e2b08"
+  },
+  "save_fold_models": true,
+  "feature_selection_reporting": "Per-trial inner selected names; outer RFE ranks and final CART scores",
+  "packages": {
+    "optuna": "5.0.0",
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "xgboost": "3.4.1",
+    "lightgbm": "4.7.0"
+  }
+}

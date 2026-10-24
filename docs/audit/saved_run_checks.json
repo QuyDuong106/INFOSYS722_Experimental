@@ -1,0 +1,230 @@
+{
+  "dataset": {
+    "shape": [
+      319,
+      38
+    ],
+    "signature": "d14de55c7bec0a380289be7ecb459ab34d611980e1320e4e9875d84673bddffe",
+    "missing": 0,
+    "duplicate_predictors": 0
+  },
+  "runs": [
+    {
+      "model": "logistic",
+      "folder": "optuna_logistic",
+      "search_version": 1,
+      "k_values": [
+        20
+      ],
+      "selected_k": {
+        "20": 319
+      },
+      "search_dimensions": 1,
+      "trial_columns": [
+        "params_model__C"
+      ],
+      "sampler_seed_matches_42_plus_fold": true,
+      "packages": {
+        "optuna": "5.0.0",
+        "scikit-learn": "1.9.1",
+        "numpy": "2.5.3",
+        "pandas": "3.0.6",
+        "xgboost": "3.4.1",
+        "lightgbm": "4.7.0"
+      },
+      "auc": 0.8679534554603349,
+      "accuracy": 0.786833855799373,
+      "confusion": [
+        [
+          118,
+          40
+        ],
+        [
+          28,
+          133
+        ]
+      ],
+      "recorded_total_fit_seconds": 1877.0666981313843
+    },
+    {
+      "model": "random_forest",
+      "folder": "optuna_random_forest",
+      "search_version": 1,
+      "k_values": [
+        20
+      ],
+      "selected_k": {
+        "20": 319
+      },
+      "search_dimensions": 4,
+      "trial_columns": [
+        "params_model__max_depth",
+        "params_model__max_features",
+        "params_model__min_samples_leaf",
+        "params_model__n_estimators"
+      ],
+      "sampler_seed_matches_42_plus_fold": true,
+      "packages": {
+        "optuna": "5.0.0",
+        "scikit-learn": "1.9.1",
+        "numpy": "2.5.3",
+        "pandas": "3.0.6",
+        "xgboost": "3.4.1",
+        "lightgbm": "4.7.0"
+      },
+      "auc": 0.8420866420316062,
+      "accuracy": 0.774294670846395,
+      "confusion": [
+        [
+          117,
+          41
+        ],
+        [
+          31,
+          130
+        ]
+      ],
+      "recorded_total_fit_seconds": 2929.442781083286
+    },
+    {
+      "model": "xgboost",
+      "folder": "optuna_xgboost",
+      "search_version": 1,
+      "k_values": [
+        20
+      ],
+      "selected_k": {
+        "20": 319
+      },
+      "search_dimensions": 6,
+      "trial_columns": [
+        "params_model__colsample_bytree",
+        "params_model__learning_rate",
+        "params_model__max_depth",
+        "params_model__n_estimators",
+        "params_model__reg_lambda",
+        "params_model__subsample"
+      ],
+      "sampler_seed_matches_42_plus_fold": true,
+      "packages": {
+        "optuna": "5.0.0",
+        "scikit-learn": "1.9.1",
+        "numpy": "2.5.3",
+        "pandas": "3.0.6",
+        "xgboost": "3.4.1",
+        "lightgbm": "4.7.0"
+      },
+      "auc": 0.8508530544854155,
+      "accuracy": 0.7836990595611285,
+      "confusion": [
+        [
+          117,
+          41
+        ],
+        [
+          28,
+          133
+        ]
+      ],
+      "recorded_total_fit_seconds": 1995.3438166358974
+    },
+    {
+      "model": "lightgbm",
+      "folder": "optuna_lightgbm",
+      "search_version": 1,
+      "k_values": [
+        20
+      ],
+      "selected_k": {
+        "20": 319
+      },
+      "search_dimensions": 6,
+      "trial_columns": [
+        "params_model__colsample_bytree",
+        "params_model__learning_rate",
+        "params_model__min_child_samples",
+        "params_model__n_estimators",
+        "params_model__num_leaves",
+        "params_model__reg_lambda"
+      ],
+      "sampler_seed_matches_42_plus_fold": true,
+      "packages": {
+        "optuna": "5.0.0",
+        "scikit-learn": "1.9.1",
+        "numpy": "2.5.3",
+        "pandas": "3.0.6",
+        "xgboost": "3.4.1",
+        "lightgbm": "4.7.0"
+      },
+      "auc": 0.8395314097020206,
+      "accuracy": 0.786833855799373,
+      "confusion": [
+        [
+          120,
+          38
+        ],
+        [
+          30,
+          131
+        ]
+      ],
+      "recorded_total_fit_seconds": 1880.7836567454506
+    },
+    {
+      "model": "stacking",
+      "folder": "stacking_v3",
+      "search_version": 3,
+      "k_values": [
+        10,
+        20,
+        30,
+        38
+      ],
+      "selected_k": {
+        "10": 1,
+        "20": 45,
+        "30": 34,
+        "38": 239
+      },
+      "search_dimensions": 14,
+      "trial_columns": [
+        "params_feature_count",
+        "params_lightgbm__model__colsample_bytree",
+        "params_lightgbm__model__learning_rate",
+        "params_lightgbm__model__min_child_samples",
+        "params_lightgbm__model__n_estimators",
+        "params_lightgbm__model__num_leaves",
+        "params_lightgbm__model__reg_lambda",
+        "params_ridge__model__alpha",
+        "params_xgboost__model__colsample_bytree",
+        "params_xgboost__model__learning_rate",
+        "params_xgboost__model__max_depth",
+        "params_xgboost__model__n_estimators",
+        "params_xgboost__model__reg_lambda",
+        "params_xgboost__model__subsample"
+      ],
+      "sampler_seed_matches_42_plus_fold": true,
+      "packages": {
+        "optuna": "5.0.0",
+        "scikit-learn": "1.9.1",
+        "numpy": "2.5.3",
+        "pandas": "3.0.6",
+        "xgboost": "3.4.1",
+        "lightgbm": "4.7.0"
+      },
+      "auc": 0.876169510181618,
+      "accuracy": 0.8056426332288401,
+      "confusion": [
+        [
+          122,
+          36
+        ],
+        [
+          26,
+          135
+        ]
+      ],
+      "recorded_total_fit_seconds": 29614.450795581797
+    }
+  ]
+}

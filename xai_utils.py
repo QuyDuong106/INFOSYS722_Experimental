@@ -14,9 +14,15 @@ def setup(model_name="stacking", seed=42):
     X, y = workflow_data()
     split = split_indices(X, y, seed)
     train, test = X.loc[split["development"]], X.loc[split["test"]]
-    model = make_evaluation_model(model_name, train, seed, "rfe", min(20, X.shape[1]))
-    with threadpool_limits(limits=1):
-        model.fit(train, y.loc[train.index])
+    if model_name == "stacking":
+        from optuna_lopo import tune_training_fold
+        model, _, _, _ = tune_training_fold(
+            "stacking", train, y.loc[train.index], seed=seed, trials=20,
+            inner_folds=3, top_k=min(20, X.shape[1]))
+    else:
+        model = make_evaluation_model(model_name, train, seed, "rfe", min(20, X.shape[1]))
+        with threadpool_limits(limits=1):
+            model.fit(train, y.loc[train.index])
     # Explain the entire raw-feature pipeline, including its learned selection.
     # Training-only imputation supplies finite inputs for SHAP and LIME.
     numeric = [c for c in X if c not in categorical_columns(X)]
@@ -49,7 +55,7 @@ def setup(model_name="stacking", seed=42):
         "model": model_name, "seed": seed, "signature": frame_signature(X,y),
         "training_rows": train.index.tolist(), "test_rows": test.index.tolist(),
         "threshold": .5, "positive_class": "1 = gallstones present; source code 0",
-        "evaluation": "Fresh fixed 85/15 development/test split; no test-based model selection",
+        "evaluation": "Fresh 85/15 development/test split; stacking uses nested base tuning within development only; separate from reported LOPO explanations",
         "explanation": "Raw features; training-only background and imputation; probability scale"
     }, indent=2))
     return model, train_filled, test_filled, y.loc[test.index], predict_proba, review, out

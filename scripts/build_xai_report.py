@@ -1,6 +1,7 @@
-"""Export tuned logistic Leave One Patient Out SHAP/LIME report figures."""
+"""Export Stacking Leave One Patient Out SHAP/LIME report figures."""
 from pathlib import Path
-import json, sys
+import json, sys, os
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/codex-mpl")
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import numpy as np
@@ -11,12 +12,13 @@ import matplotlib.pyplot as plt
 import shap
 from lime.lime_tabular import LimeTabularExplainer
 from threadpoolctl import threadpool_limits
-from utils import workflow_data, make_evaluation_model, categorical_columns, frame_signature
+from utils import workflow_data, categorical_columns, frame_signature
+from optuna_lopo import make_tuning_template
 
 
 def main():
     X,y = workflow_data()
-    source = ROOT/'results/optuna_logistic'
+    source = ROOT/'results/stacking_v3'
     config = json.loads((source/'run_config.json').read_text())
     assert json.loads((source/'progress.json').read_text())['complete']
     assert config['signature'] == frame_signature(X,y)
@@ -28,16 +30,18 @@ def main():
         group=review[review.error_type.eq(kind)]
         errors[kind]=int(group.probability_present.idxmin() if kind=='FN' else group.probability_present.idxmax())
     sampled=pd.Series(X.index).sample(20,random_state=42).tolist()
-    values_by_row,local_rows={},[]
+    values_by_row,local_rows,lime_rows={},[],[]
     for row in dict.fromkeys([*sampled,*errors.values()]):
         fold=X.index.get_loc(row)
-        checkpoint=json.loads((source/'folds'/f'fold_{fold:04d}_logistic.json').read_text())
+        checkpoint=json.loads((source/'folds'/f'fold_{fold:04d}_stacking.json').read_text())
+        assert checkpoint['source_row'] == row
+        np.testing.assert_allclose(checkpoint['probability'], review.loc[row, 'probability_present'], atol=1e-12)
         raw_train=X.drop(index=row)
         train,test=raw_train.copy(),X.loc[[row]].copy()
         for c in train:
             fill=raw_train[c].mode().iloc[0] if c in categorical_columns(raw_train) else raw_train[c].median()
             train[c],test[c]=train[c].fillna(fill),test[c].fillna(fill)
-        model=make_evaluation_model('logistic',raw_train,config['seed'],'rfe',config['top_k'])
+        model=make_tuning_template('stacking',raw_train,config['seed'],config['top_k'])
         model.set_params(**checkpoint['best_params'])
         with threadpool_limits(limits=1):model.fit(raw_train,y.drop(index=row))
         def predict(v):
@@ -54,6 +58,7 @@ def main():
         print('Explained',row,probability,flush=True)
         if row in errors.values():
             kind=next(k for k,v in errors.items() if v==row)
+            pd.DataFrame(dict(feature=X.columns, value=test.iloc[0].to_numpy(), shap=values)).to_csv(out/f'local_{kind.lower()}_shap.csv',index=False)
             lime=LimeTabularExplainer(train.to_numpy(),feature_names=list(X.columns),
                 categorical_features=[X.columns.get_loc(c) for c in categorical_columns(train)],
                 class_names=['Absent','Present'],random_state=42,mode='classification',discretize_continuous=True)
@@ -67,6 +72,8 @@ def main():
             axes[0].set_xlabel('SHAP contribution to P(gallstones present)')
             axes[0].set_title(f'(a) SHAP | baseline {base:.3f}',fontsize=11)
             conditions,weights=zip(*exp.as_list(label=1))
+            for (feature, weight), (condition, _) in zip(exp.as_map()[1], exp.as_list(label=1)):
+                lime_rows.append(dict(source_row=row,error_type=kind,feature=X.columns[feature],condition=condition,weight=weight))
             order=np.argsort(np.abs(weights));weights=np.asarray(weights)
             axes[1].barh(np.asarray(conditions)[order],weights[order],color=['#bd3545' if v>0 else '#2875ad' for v in weights[order]])
             axes[1].set_xlabel('LIME local surrogate weight')
@@ -81,15 +88,17 @@ def main():
             exp.save_to_file(str(out/f'local_{kind.lower()}.html'))
     values=np.stack([values_by_row[row] for row in sampled])
     shap.summary_plot(values,X.loc[sampled],max_display=12,show=False,plot_size=(8,5))
-    plt.title('Tuned logistic regression: held-out SHAP explanations',fontsize=12)
+    plt.title('Stacking: held-out SHAP explanations',fontsize=12)
     for suffix in ['pdf','png']:plt.savefig(out/f'global_shap.{suffix}',dpi=200,bbox_inches='tight')
     plt.close('all')
     importance=pd.Series(np.abs(values).mean(axis=0),index=X.columns).sort_values(ascending=False)
     importance.rename('mean_absolute_shap').to_csv(out/'global_importance.csv')
     pd.DataFrame(values,index=sampled,columns=X.columns).to_csv(out/'sampled_shap.csv',index_label='source_row')
     pd.DataFrame(local_rows).to_csv(out/'local_explanation_metadata.csv',index=False)
-    (out/'protocol.json').write_text(json.dumps(dict(model='logistic',evaluation='Tuned Leave One Patient Out',
-        source_results='results/optuna_logistic',sampled_rows=sampled,error_rows=errors,background_rows=25,
+    pd.DataFrame(lime_rows).to_csv(out/'local_lime_importance.csv',index=False)
+    pd.DataFrame([dict(feature=c,spearman_value_shap=(X.loc[sampled,c].corr(pd.Series(values[:,i],index=sampled),method='spearman') if X.loc[sampled,c].nunique()>1 and np.ptp(values[:,i])>0 else np.nan)) for i,c in enumerate(X.columns)]).to_csv(out/'shap_feature_directions.csv',index=False)
+    (out/'protocol.json').write_text(json.dumps(dict(model='stacking',evaluation='Tuned Leave One Patient Out',
+        source_results='results/stacking_v3',sampled_rows=sampled,error_rows=errors,background_rows=25,
         shap_samples=256,lime_samples=3000,seed=42,selection='Most confident errors, selected retrospectively',
         dataset_signature=frame_signature(X,y),interpretation='Separate held-out fold models and training-only backgrounds'),indent=2))
     print(importance.head(6).to_string())

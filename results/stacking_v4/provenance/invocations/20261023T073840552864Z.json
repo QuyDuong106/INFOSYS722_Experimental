@@ -1,0 +1,32 @@
+{
+  "started_utc": "2026-10-23T07:38:40.530227+00:00",
+  "command": [
+    "scripts/tune_stacking.py",
+    "--reference-dir",
+    "results/dynamic_individual_v4",
+    "--output-dir",
+    "results/stacking_v4",
+    "--seed",
+    "42",
+    "--trials",
+    "20",
+    "--k-values",
+    "10",
+    "20",
+    "30",
+    "38"
+  ],
+  "partial_request": false,
+  "max_folds": null,
+  "platform": "macOS-15.7.4-arm64-arm-64bit-Mach-O",
+  "cpu_count": 10,
+  "python": "3.13.5 (main, Jun 11 2025, 15:36:57) [Clang 17.0.0 (clang-1700.0.13.3)]",
+  "executable": "/Users/quyduong106/projects/INFOSYS722/Experimental/.venv/bin/python",
+  "thread_environment": {
+    "OMP_NUM_THREADS": null,
+    "MKL_NUM_THREADS": null,
+    "OPENBLAS_NUM_THREADS": null
+  },
+  "status": "completed_invocation",
+  "ended_utc": "2026-10-24T00:02:09.378941+00:00"
+}

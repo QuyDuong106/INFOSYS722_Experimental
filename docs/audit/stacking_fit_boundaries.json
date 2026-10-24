@@ -1,0 +1,14 @@
+{
+  "fit_calls": 48,
+  "outer_excluded_id": 1000,
+  "outer_excluded_seen": false,
+  "inner_validation_excluded": true,
+  "stacking_base_crossfit_checked": true,
+  "fit_sizes": [
+    31,
+    32,
+    47,
+    48,
+    71
+  ]
+}

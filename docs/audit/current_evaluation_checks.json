@@ -1,0 +1,132 @@
+{
+  "scope": "All current paper checkpoints/trials; all 1276 individual saved pipeline predictions; Stacking source and reconstructed evidence, not full retuning",
+  "rows": 319,
+  "predictors": 38,
+  "missing_cells": 0,
+  "duplicate_predictor_rows": 0,
+  "signature": "d14de55c7bec0a380289be7ecb459ab34d611980e1320e4e9875d84673bddffe",
+  "models": {
+    "logistic": {
+      "checkpoints": 319,
+      "completed_trials": 6380,
+      "saved_pipelines_verified": 319,
+      "recorded_inner_partitions_verified": 957,
+      "trial_inner_selections_verified": 19140,
+      "metrics": {
+        "roc_auc": 0.8730246088528971,
+        "accuracy": 0.8150470219435737,
+        "precision": 0.7802197802197802,
+        "recall": 0.8819875776397516,
+        "specificity": 0.7468354430379747,
+        "f1": 0.8279883381924198,
+        "fnr": 0.11801242236024845
+      },
+      "confusion": {
+        "TN": 118,
+        "FP": 40,
+        "FN": 19,
+        "TP": 142
+      },
+      "mean_best_inner_auc": 0.8753780013518825,
+      "original_source_fingerprint_present": true
+    },
+    "random_forest": {
+      "checkpoints": 319,
+      "completed_trials": 6380,
+      "saved_pipelines_verified": 319,
+      "recorded_inner_partitions_verified": 957,
+      "trial_inner_selections_verified": 19140,
+      "metrics": {
+        "roc_auc": 0.8385879393034044,
+        "accuracy": 0.7774294670846394,
+        "precision": 0.7710843373493976,
+        "recall": 0.7950310559006211,
+        "specificity": 0.759493670886076,
+        "f1": 0.7828746177370031,
+        "fnr": 0.20496894409937888
+      },
+      "confusion": {
+        "TN": 120,
+        "FP": 38,
+        "FN": 33,
+        "TP": 128
+      },
+      "mean_best_inner_auc": 0.8484466297765506,
+      "original_source_fingerprint_present": true
+    },
+    "xgboost": {
+      "checkpoints": 319,
+      "completed_trials": 6380,
+      "saved_pipelines_verified": 319,
+      "recorded_inner_partitions_verified": 957,
+      "trial_inner_selections_verified": 19140,
+      "metrics": {
+        "roc_auc": 0.8448384306942369,
+        "accuracy": 0.780564263322884,
+        "precision": 0.7757575757575758,
+        "recall": 0.7950310559006211,
+        "specificity": 0.7658227848101266,
+        "f1": 0.7852760736196319,
+        "fnr": 0.20496894409937888
+      },
+      "confusion": {
+        "TN": 121,
+        "FP": 37,
+        "FN": 33,
+        "TP": 128
+      },
+      "mean_best_inner_auc": 0.857064344006971,
+      "original_source_fingerprint_present": true
+    },
+    "lightgbm": {
+      "checkpoints": 319,
+      "completed_trials": 6380,
+      "saved_pipelines_verified": 319,
+      "recorded_inner_partitions_verified": 957,
+      "trial_inner_selections_verified": 19140,
+      "metrics": {
+        "roc_auc": 0.8464895038918154,
+        "accuracy": 0.774294670846395,
+        "precision": 0.7730061349693251,
+        "recall": 0.782608695652174,
+        "specificity": 0.7658227848101266,
+        "f1": 0.7777777777777778,
+        "fnr": 0.21739130434782608
+      },
+      "confusion": {
+        "TN": 121,
+        "FP": 37,
+        "FN": 35,
+        "TP": 126
+      },
+      "mean_best_inner_auc": 0.8500741976477297,
+      "original_source_fingerprint_present": true
+    },
+    "stacking": {
+      "checkpoints": 319,
+      "completed_trials": 6380,
+      "saved_pipelines_verified": 0,
+      "recorded_inner_partitions_verified": 0,
+      "trial_inner_selections_verified": 0,
+      "metrics": {
+        "roc_auc": 0.876169510181618,
+        "accuracy": 0.8056426332288401,
+        "precision": 0.7894736842105263,
+        "recall": 0.8385093167701864,
+        "specificity": 0.7721518987341772,
+        "f1": 0.8132530120481928,
+        "fnr": 0.16149068322981366
+      },
+      "confusion": {
+        "TN": 122,
+        "FP": 36,
+        "FN": 26,
+        "TP": 135
+      },
+      "mean_best_inner_auc": 0.8747274265845524,
+      "original_source_fingerprint_present": false
+    }
+  },
+  "legacy_visualisation_obsolete_scaler_lookup_confirmed": true,
+  "passed": true
+}
