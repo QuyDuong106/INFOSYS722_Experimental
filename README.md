@@ -149,3 +149,7 @@ The paper compares completed dynamic-feature results for all five models; histor
 ## Current comparison audit (24 October 2026)
 
 The paper retains only the latest base-tuned Stacking result from `results/stacking_v4`, alongside the completed `results/dynamic_individual_v4` runs. The historical meta-tuned stacking row is excluded. All five use matching candidate fields, dynamic-k search and preprocessing; their selected subsets can differ. See [the fairness audit and optional matched-input rerun commands](docs/COMPARISON_FAIRNESS_2026-10-24.md).
+
+## Code availability and latest execution
+
+See [CODE_AVAILABILITY.md](CODE_AVAILABILITY.md) for the published Optuna code version, execution entry points, completed evidence directories and commands for new matched runs. Computational code and version-4 results were published in commit `0b6b64a`; the current documentation update does not change model training.
